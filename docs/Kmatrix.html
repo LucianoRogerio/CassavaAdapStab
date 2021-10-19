@@ -13,7 +13,7 @@
 
 <meta name="date" content="2021-10-19" />
 
-<title>DeBLUPs</title>
+<title>Kmatrix</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -350,7 +350,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">DeBLUPs</h1>
+<h1 class="title toc-ignore">Kmatrix</h1>
 <h4 class="author">LucianoRogerio</h4>
 <h4 class="date">2021-10-19</h4>
 
@@ -503,7 +503,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/DeBLUPs.Rmd</code>) and HTML (<code>docs/DeBLUPs.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Kmatrix.Rmd</code>) and HTML (<code>docs/Kmatrix.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -532,7 +532,24 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/cf2643ab8b3bda053c8b5407dbc14b53e908d270/analysis/DeBLUPs.Rmd" target="_blank">cf2643a</a>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/9ab3872ebbe4e448369fa9da88a09480953ec0a7/analysis/Kmatrix.Rmd" target="_blank">9ab3872</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-10-19
+</td>
+<td>
+Update and add of Kmatrix page
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/cf2643ab8b3bda053c8b5407dbc14b53e908d270/analysis/Kmatrix.Rmd" target="_blank">cf2643a</a>
 </td>
 <td>
 LucianoRogerio
@@ -544,74 +561,6 @@ LucianoRogerio
 First commit of webpages to GitHub
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/fe8e004def416689ca7f046c3e7148d6205e5480/docs/DeBLUPs.html" target="_blank">fe8e004</a>
-</td>
-<td>
-LucianoRogerio
-</td>
-<td>
-2021-10-19
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/59dbfce9e3d19e0f84f651d0c90d070b95fcbc5b/analysis/DeBLUPs.Rmd" target="_blank">59dbfce</a>
-</td>
-<td>
-LucianoRogerio
-</td>
-<td>
-2021-10-19
-</td>
-<td>
-First Pages of the repository
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/2eab993f3b412fe0950bc561e4093105a723cc2f/docs/DeBLUPs.html" target="_blank">2eab993</a>
-</td>
-<td>
-LucianoRogerio
-</td>
-<td>
-2021-10-19
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/d68e935fdd05420bdba1a280b0ac279b0d01f94f/analysis/DeBLUPs.Rmd" target="_blank">d68e935</a>
-</td>
-<td>
-LucianoRogerio
-</td>
-<td>
-2021-10-19
-</td>
-<td>
-First Pages of the repository
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -619,54 +568,69 @@ First Pages of the repository
 </div>
 </div>
 </div>
-<p><a href="index.html"><strong>HOME</strong></a></p>
+<p><a href="index.html"><strong>HOME</strong></a>; <a href="DeBLUPs.html"><strong>Deregressed BLUPs for Genomic prediction</strong></a></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<pre class="r"><code>library(foreach)
-library(doParallel)</code></pre>
-<pre><code>Carregando pacotes exigidos: iterators</code></pre>
-<pre><code>Carregando pacotes exigidos: parallel</code></pre>
-<pre class="r"><code>library(here)</code></pre>
-<pre><code>here() starts at C:/Users/User/Documents/GitHub/CassavaAdapStab</code></pre>
-<pre class="r"><code>source(here::here(&quot;code&quot;, &quot;deregress.R&quot;))
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>-- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
+<pre><code>v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.5     v dplyr   1.0.7
+v tidyr   1.1.4     v stringr 1.4.0
+v readr   2.0.2     v forcats 0.5.1</code></pre>
+<pre><code>-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(sommer)</code></pre>
+<pre><code>Carregando pacotes exigidos: Matrix</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
+
+    expand, pack, unpack</code></pre>
+<pre><code>Carregando pacotes exigidos: MASS</code></pre>
+<pre><code>
+Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:dplyr&#39;:
+
+    select</code></pre>
+<pre><code>Carregando pacotes exigidos: lattice</code></pre>
+<pre><code>Carregando pacotes exigidos: crayon</code></pre>
+<pre><code>
+Attaching package: &#39;crayon&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:ggplot2&#39;:
+
+    %+%</code></pre>
+<pre class="r"><code>GBSdata &lt;- readRDS(here::here(&quot;data&quot;, &quot;GBSDataUpdated.RDS&quot;))
+dim(GBSdata)</code></pre>
+<pre><code>[1]  3354 27045</code></pre>
+<pre class="r"><code>dnames&lt;-read.table(here::here(&quot;data&quot;, &quot;Clones_GBS_MHPRVG.txt&quot;), head=T)
+
+## Select GBS clones
+GBSdata2 &lt;- GBSdata[rownames(GBSdata)%in%dnames$NameGBS,]
+
+##Replace GBSdata2 rownames
+dnames2 &lt;- dnames[order(match(dnames$NameGBS,rownames(GBSdata)), na.last = NA),]
+rownames(GBSdata2) &lt;- dnames2$Nova
 
 phen&lt;-read.table(here::here(&quot;data&quot;, &quot;Dados_Finais_2020_15_locais.csv&quot;), head=T, sep = &quot;;&quot;, dec = &quot;.&quot;)
+table(rownames(GBSdata2) %in% phen$CLONE) # All genotyped clones are phenotyped</code></pre>
+<pre><code>
+TRUE 
+ 605 </code></pre>
+<pre class="r"><code># Calculate allele frequencies at each locus
+freq &lt;- colMeans(GBSdata2, na.rm=T)/2
+# Convert raw allele frequencies to MINOR allele frequencies (MAF)
+maf &lt;- freq
+maf[which(maf &gt; 0.5)] &lt;- 1 - maf[which(maf &gt; 0.5)]
+# Subset to only SNP with MAF&gt;1%
+length(which(maf &gt; 1/sqrt(nrow(GBSdata2)))) # 17650... of these SNPs pass</code></pre>
+<pre><code>[1] 17650</code></pre>
+<pre class="r"><code>GS.sel.z &lt;- GBSdata2[,which(maf &gt; 1/sqrt(nrow(GBSdata2)))]
 
-# Trait list (this be frequently useful to iterate an analysis over many traits)
-traits&lt;-c(&quot;PTR&quot;, &quot;PPA&quot;, &quot;AP&quot;, &quot;DMC&quot;, &quot;DRY&quot;)
-
-##########
-# Create design variables that explicitly nest factors
-# LOC.YEAR = YEAR nested in LOCATION
-phen[,&quot;LOC.YEAR&quot;] &lt;- phen$LOCATION
-# LOC.YEAR.REP = REP nested within LOC.YEAR
-phen[,&quot;LOC.YEAR.REP&quot;]&lt;-paste(phen$LOC.YEAR,phen$REP,sep=&quot;:&quot;)
-
-proctime &lt;- proc.time(); # This is just to store the start time
-registerDoParallel(cores=4) # Specify the number of cores (my lab computer has 8; I will use 6 of them)
-DRG &lt;- foreach(a=traits, i=icount(), .inorder=TRUE) %dopar% {
-  require(lme4)
-  model&lt;-lmer(data=phen,formula = get(traits[i]) ~ (1|CLONE) + LOC.YEAR + (1|LOC.YEAR.REP)) # CLONE and REP are random LOC.YEAR is fixed
-  drg&lt;-deregress(model,traits[i]) }
-
-
-# LOAD AND COMBINE RESULTS FROM STAGE 1 ANALYSIS ---------------------------------------------------------------------------
-# since I used &quot;foreach&quot; to run each stage 1 analysis in parallel, each trait is in a separate element of a list
-# We need to process the object DRG into a data.frame or matrix for further analysis
-
-drgphen&lt;-data.frame(CLONE = unique(phen$CLONE),stringsAsFactors=F)
-for(i in 1:length(DRG)){
-  drg&lt;-data.frame(CLONE = rownames(DRG[[i]]$drgBLUP),stringsAsFactors=F)
-  drg[,DRG[[i]]$Trait]&lt;-DRG[[i]]$drgBLUP
-  drg[,paste(DRG[[i]]$Trait,&quot;egv&quot;,sep=&quot;.&quot;)]&lt;-DRG[[i]]$BLUP
-  drg[,paste(DRG[[i]]$Trait,&quot;wt&quot;,sep=&quot;.&quot;)]&lt;-DRG[[i]]$weights
-  drgphen&lt;-merge(drgphen,drg,by=&quot;CLONE&quot;,all.x=T)
-}
-rownames(drgphen)&lt;-drgphen$CLONE
-
-write.table(drgphen, file = here::here(&quot;output&quot;, &quot;DeregressBLUPsAll.CSV&quot;), sep = &quot;;&quot;,
-            dec = &quot;.&quot;, quote = F, row.names = T)</code></pre>
-<p><a href="index.html"><strong>HOME</strong></a>; <a href="Kmatrix.html"><strong>Kinship Matrix</strong></a></p>
+# Construct kinship matrix with A.mat and D.mat function (sommer package)
+A &lt;- A.mat(GS.sel.z-1)
+D &lt;- D.mat(GS.sel.z-1)</code></pre>
+<p><a href="index.html"><strong>HOME</strong></a>; <a href="DeBLUPs.html"><strong>Deregressed BLUPs for Genomic prediction</strong></a>; <a href="GBLUP.html"><strong>GBLUP Prediction</strong></a></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -687,26 +651,31 @@ locale:
 [5] LC_TIME=Portuguese_Brazil.1252    
 
 attached base packages:
-[1] parallel  stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] here_1.0.1        doParallel_1.0.16 iterators_1.0.13  foreach_1.5.1    
-[5] workflowr_1.6.2  
+ [1] sommer_4.1.4    crayon_1.4.1    lattice_0.20-44 MASS_7.3-54    
+ [5] Matrix_1.3-4    forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7    
+ [9] purrr_0.3.4     readr_2.0.2     tidyr_1.1.4     tibble_3.1.5   
+[13] ggplot2_3.3.5   tidyverse_1.3.1 workflowr_1.6.2
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7       nloptr_1.2.2.2   pillar_1.6.3     compiler_4.1.1  
- [5] bslib_0.3.1      later_1.3.0      jquerylib_0.1.4  git2r_0.28.0    
- [9] tools_4.1.1      boot_1.3-28      lme4_1.1-27.1    digest_0.6.28   
-[13] nlme_3.1-152     lattice_0.20-44  jsonlite_1.7.2   evaluate_0.14   
-[17] lifecycle_1.0.1  tibble_3.1.5     pkgconfig_2.0.3  rlang_0.4.11    
-[21] Matrix_1.3-4     yaml_2.2.1       xfun_0.26        fastmap_1.1.0   
-[25] stringr_1.4.0    knitr_1.36       fs_1.5.0         vctrs_0.3.8     
-[29] sass_0.4.0       grid_4.1.1       rprojroot_2.0.2  glue_1.4.2      
-[33] R6_2.5.1         fansi_0.5.0      rmarkdown_2.11   minqa_1.2.4     
-[37] magrittr_2.0.1   whisker_0.4      MASS_7.3-54      splines_4.1.1   
-[41] promises_1.2.0.1 codetools_0.2-18 ellipsis_0.3.2   htmltools_0.5.2 
-[45] httpuv_1.6.3     utf8_1.2.2       stringi_1.7.5    crayon_1.4.1    </code></pre>
+ [1] Rcpp_1.0.7       here_1.0.1       lubridate_1.8.0  assertthat_0.2.1
+ [5] rprojroot_2.0.2  digest_0.6.28    utf8_1.2.2       R6_2.5.1        
+ [9] cellranger_1.1.0 backports_1.2.1  reprex_2.0.1     evaluate_0.14   
+[13] httr_1.4.2       pillar_1.6.3     rlang_0.4.11     readxl_1.3.1    
+[17] rstudioapi_0.13  whisker_0.4      jquerylib_0.1.4  rmarkdown_2.11  
+[21] munsell_0.5.0    broom_0.7.9      compiler_4.1.1   httpuv_1.6.3    
+[25] modelr_0.1.8     xfun_0.26        pkgconfig_2.0.3  htmltools_0.5.2 
+[29] tidyselect_1.1.1 fansi_0.5.0      tzdb_0.1.2       dbplyr_2.1.1    
+[33] withr_2.4.2      later_1.3.0      grid_4.1.1       jsonlite_1.7.2  
+[37] gtable_0.3.0     lifecycle_1.0.1  DBI_1.1.1        git2r_0.28.0    
+[41] magrittr_2.0.1   scales_1.1.1     cli_3.0.1        stringi_1.7.5   
+[45] fs_1.5.0         promises_1.2.0.1 xml2_1.3.2       bslib_0.3.1     
+[49] ellipsis_0.3.2   generics_0.1.0   vctrs_0.3.8      tools_4.1.1     
+[53] glue_1.4.2       hms_1.1.1        fastmap_1.1.0    yaml_2.2.1      
+[57] colorspace_2.0-2 rvest_1.0.1      knitr_1.36       haven_2.4.3     
+[61] sass_0.4.0      </code></pre>
 </div>
 </div>
 
