@@ -57,5 +57,5 @@ write.table(drgphen, file = here::here("output", "DeregressBLUPsAll.CSV"), sep =
 
 ```
 
-[**HOME**](index.html)
+[**HOME**](index.html);
 [**Kinship Matrix**](Kmatrix.html)

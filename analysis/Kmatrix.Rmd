@@ -1,0 +1,20 @@
+---
+title: "Kmatrix"
+author: "LucianoRogerio"
+date: "2021-10-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+[**HOME**](index.html);
+[**Deregressed BLUPs for Genomic prediction**](DeBLUPs.html)
+
+## Introduction
+
+```{r}
+
+```
+
+[**HOME**](index.html);
+[**Deregressed BLUPs for Genomic prediction**](DeBLUPs.html)
