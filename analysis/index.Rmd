@@ -14,6 +14,8 @@ Here will be available all the scripts used for the *Adaptability and stability 
 
 ## Methods
 
-### [Deregression BLUPs for Genomic prediction](DeBLUPs.html)
+### [Deregressed BLUPs for Genomic prediction](DeBLUPs.html)
 
 ### [Kinship matrix](Kmatrix.html)
+
+### [GBLUP Prediction](GBLUP.html)

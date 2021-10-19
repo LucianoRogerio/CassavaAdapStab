@@ -13,8 +13,38 @@ editor_options:
 ## Introduction
 
 ```{r}
+library(tidyverse)
+library(sommer)
+GBSdata <- readRDS(here::here("data", "GBSDataUpdated.RDS"))
+dim(GBSdata)
+dnames<-read.table(here::here("data", "Clones_GBS_MHPRVG.txt"), head=T)
+
+## Select GBS clones
+GBSdata2 <- GBSdata[rownames(GBSdata)%in%dnames$NameGBS,]
+
+##Replace GBSdata2 rownames
+dnames2 <- dnames[order(match(dnames$NameGBS,rownames(GBSdata)), na.last = NA),]
+rownames(GBSdata2) <- dnames2$Nova
+
+phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ";", dec = ".")
+table(rownames(GBSdata2) %in% phen$CLONE) # All genotyped clones are phenotyped
+
+# Calculate allele frequencies at each locus
+freq <- colMeans(GBSdata2, na.rm=T)/2
+# Convert raw allele frequencies to MINOR allele frequencies (MAF)
+maf <- freq
+maf[which(maf > 0.5)] <- 1 - maf[which(maf > 0.5)]
+# Subset to only SNP with MAF>1%
+length(which(maf > 1/sqrt(nrow(GBSdata2)))) # 17650... of these SNPs pass
+GS.sel.z <- GBSdata2[,which(maf > 1/sqrt(nrow(GBSdata2)))]
+
+# Construct kinship matrix with A.mat and D.mat function (sommer package)
+A <- A.mat(GS.sel.z-1)
+D <- D.mat(GS.sel.z-1)
+
 
 ```
 
 [**HOME**](index.html);
-[**Deregressed BLUPs for Genomic prediction**](DeBLUPs.html)
+[**Deregressed BLUPs for Genomic prediction**](DeBLUPs.html);
+[**GBLUP Prediction**](GBLUP.html)
