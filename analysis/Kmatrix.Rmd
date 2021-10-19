@@ -42,6 +42,8 @@ GS.sel.z <- GBSdata2[,which(maf > 1/sqrt(nrow(GBSdata2)))]
 A <- A.mat(GS.sel.z-1)
 D <- D.mat(GS.sel.z-1)
 
+saveRDS(A, here::here("output", "KinshipAdd.RDS"))
+saveRDS(D, here::here("output", "kinshipDom.RDS"))
 
 ```
 
