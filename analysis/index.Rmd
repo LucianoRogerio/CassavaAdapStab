@@ -8,4 +8,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+##Introduction
+
+Here will be available all the scripts used for the *Adaptability and stability of accessions of cassava bank of germplasm: Much more than estimates*
+
+## Methods
+
+### [Deregression BLUPs for Genomic prediction](DeBLUPs.html)
+
+### [Kinship matrix](Kmatrix.html)

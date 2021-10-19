@@ -1,0 +1,57 @@
+---
+title: "DeBLUPs"
+author: "LucianoRogerio"
+date: "2021-10-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+library(foreach)
+library(doParallel)
+library(here)
+
+source(here::here("code", "deregress.R"))
+
+phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ";", dec = ".")
+
+# Trait list (this be frequently useful to iterate an analysis over many traits)
+traits<-c("PTR", "PPA", "AP", "DMC", "DRY")
+
+##########
+# Create design variables that explicitly nest factors
+# LOC.YEAR = YEAR nested in LOCATION
+phen[,"LOC.YEAR"] <- phen$LOCATION
+# LOC.YEAR.REP = REP nested within LOC.YEAR
+phen[,"LOC.YEAR.REP"]<-paste(phen$LOC.YEAR,phen$REP,sep=":")
+
+proctime <- proc.time(); # This is just to store the start time
+registerDoParallel(cores=4) # Specify the number of cores (my lab computer has 8; I will use 6 of them)
+DRG <- foreach(a=traits, i=icount(), .inorder=TRUE) %dopar% {
+  require(lme4)
+  model<-lmer(data=phen,formula = get(traits[i]) ~ (1|CLONE) + LOC.YEAR + (1|LOC.YEAR.REP)) # CLONE and REP are random LOC.YEAR is fixed
+  drg<-deregress(model,traits[i]) }
+
+
+# LOAD AND COMBINE RESULTS FROM STAGE 1 ANALYSIS ---------------------------------------------------------------------------
+# since I used "foreach" to run each stage 1 analysis in parallel, each trait is in a separate element of a list
+# We need to process the object DRG into a data.frame or matrix for further analysis
+
+drgphen<-data.frame(CLONE = unique(phen$CLONE),stringsAsFactors=F)
+for(i in 1:length(DRG)){
+  drg<-data.frame(CLONE = rownames(DRG[[i]]$drgBLUP),stringsAsFactors=F)
+  drg[,DRG[[i]]$Trait]<-DRG[[i]]$drgBLUP
+  drg[,paste(DRG[[i]]$Trait,"egv",sep=".")]<-DRG[[i]]$BLUP
+  drg[,paste(DRG[[i]]$Trait,"wt",sep=".")]<-DRG[[i]]$weights
+  drgphen<-merge(drgphen,drg,by="CLONE",all.x=T)
+}
+rownames(drgphen)<-drgphen$CLONE
+
+write.table(drgphen, file = here::here("output", "DeregressBLUPsAll.CSV"), sep = ";",
+            dec = ".", quote = F, row.names = T)
+
+```
+
