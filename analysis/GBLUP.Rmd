@@ -10,7 +10,8 @@ editor_options:
 ## Introduction
 
 ```{r}
-library(here); library(sommer); library(reactable); library(tidyverse)
+suppressMessages(library(here)); suppressMessages(library(sommer))
+suppressMessages(library(reactable)); suppressMessages(library(tidyverse))
 
 traits<-c("PTR", "PPA", "AP", "DMC", "DRY")
 
