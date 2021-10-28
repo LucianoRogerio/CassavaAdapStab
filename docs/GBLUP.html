@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="LucianoRogerio" />
+
+<meta name="date" content="2021-10-19" />
+
+<title>GBLUP</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="site_libs/react-17.0.0/react.min.js"></script>
+<script src="site_libs/react-17.0.0/react-dom.min.js"></script>
+<script src="site_libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/reactable-binding-0.2.3/reactable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CassavaAdapStab</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">GBLUP</h1>
+<h4 class="author">LucianoRogerio</h4>
+<h4 class="date">2021-10-19</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-10-28
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CassavaAdapStab/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211019code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211019)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211019code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211019)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree8f7da6f78461eb0b3dd1e165d0a9f0d1dfc9af14targetblank8f7da6fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/8f7da6f78461eb0b3dd1e165d0a9f0d1dfc9af14" target="_blank">8f7da6f</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree8f7da6f78461eb0b3dd1e165d0a9f0d1dfc9af14targetblank8f7da6fa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/8f7da6f78461eb0b3dd1e165d0a9f0d1dfc9af14" target="_blank">8f7da6f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  output/GenPred.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/GBLUP.Rmd</code>) and HTML (<code>docs/GBLUP.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/8f7da6f78461eb0b3dd1e165d0a9f0d1dfc9af14/analysis/GBLUP.Rmd" target="_blank">8f7da6f</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-10-28
+</td>
+<td>
+Genomic Prediction for five agronomic traits
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/4169659aa59772279ef51ed15eb7e7b221eb0bda/analysis/GBLUP.Rmd" target="_blank">4169659</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-10-28
+</td>
+<td>
+First commit for GBLUP analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<pre class="r"><code>library(here); library(sommer); library(reactable); library(tidyverse)</code></pre>
+<pre><code>here() starts at /Users/lbd54/Documents/GitHub/CassavaAdapStab</code></pre>
+<pre><code>Loading required package: Matrix</code></pre>
+<pre><code>Loading required package: MASS</code></pre>
+<pre><code>Loading required package: lattice</code></pre>
+<pre><code>Loading required package: crayon</code></pre>
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+✓ tibble  3.1.5     ✓ dplyr   1.0.7
+✓ tidyr   1.1.4     ✓ stringr 1.4.0
+✓ readr   2.0.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+x ggplot2::%+%()  masks crayon::%+%()
+x tidyr::expand() masks Matrix::expand()
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+x tidyr::pack()   masks Matrix::pack()
+x dplyr::select() masks MASS::select()
+x tidyr::unpack() masks Matrix::unpack()</code></pre>
+<pre class="r"><code>traits&lt;-c(&quot;PTR&quot;, &quot;PPA&quot;, &quot;AP&quot;, &quot;DMC&quot;, &quot;DRY&quot;)
+
+drgphen &lt;- read.table(here::here(&quot;output&quot;, &quot;DeregressBLUPsAll.CSV&quot;), sep = &quot;;&quot;, dec = &quot;.&quot;)
+A &lt;- readRDS(here::here(&quot;output&quot;, &quot;KinshipAdd.RDS&quot;))
+D &lt;- readRDS(here::here(&quot;output&quot;, &quot;KinshipDom.RDS&quot;))
+
+drgphen2 &lt;- drgphen[drgphen$CLONE%in%rownames(A),]
+drgphen2$Add &lt;- factor(drgphen2$CLONE, levels = rownames(A))
+
+rownames(D) &lt;- paste(rownames(D), &quot;d&quot;, sep = &quot;.&quot;)
+colnames(D) &lt;- paste(colnames(D), &quot;d&quot;, sep = &quot;.&quot;)
+
+drgphen2$Dom &lt;- factor(paste(drgphen2$CLONE, &quot;d&quot;, sep = &quot;.&quot;),
+                       levels = rownames(D))
+
+## Genomic Prediction using sommer package for the five agronomic traits
+ModelResults&lt;-list()
+for(i in traits){
+    require(sommer)
+# Must remove rows where there are missing values for the current trait
+drgphen3 &lt;- drgphen2[!is.na(drgphen2[ , i]), ] %&gt;% select(Add, Dom, i, paste(i, &quot;wt&quot;, sep = &quot;.&quot;))
+colnames(drgphen3)[3:4] &lt;- c(&quot;trait&quot;, &quot;WT&quot;)
+  
+fit &lt;- mmer(fixed = trait ~ 1,
+            random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
+            weights = WT,
+            data = drgphen3, getPEV = TRUE)
+ModelResults[[i]] &lt;- fit
+}</code></pre>
+<pre><code>Note: Using an external vector in selections is ambiguous.
+ℹ Use `all_of(i)` instead of `i` to silence this message.
+ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
+This message is displayed once per session.</code></pre>
+<pre><code>iteration    LogLik     wall    cpu(sec)   restrained
+    1      -261.59   14:57:44      0           0
+    2      -230.529   14:57:45      1           0
+    3      -220.893   14:57:45      1           0
+    4      -220.588   14:57:46      2           0
+    5      -220.583   14:57:47      3           0
+    6      -220.583   14:57:47      3           0
+iteration    LogLik     wall    cpu(sec)   restrained
+    1      -239.168   14:57:49      1           0
+    2      -213.241   14:57:49      1           0
+    3      -204.55   14:57:50      2           0
+    4      -203.844   14:57:50      2           0
+    5      -203.835   14:57:51      3           0
+    6      -203.835   14:57:51      3           0
+iteration    LogLik     wall    cpu(sec)   restrained
+    1      -182.924   14:57:53      1           0
+    2      -174.806   14:57:53      1           0
+    3      -171.671   14:57:54      2           0
+    4      -171.159   14:57:54      2           0
+    5      -171.134   14:57:55      3           0
+    6      -171.133   14:57:56      4           0
+    7      -171.133   14:57:56      4           0
+iteration    LogLik     wall    cpu(sec)   restrained
+    1      -255.691   14:57:57      0           0
+    2      -224.549   14:57:58      1           0
+    3      -212.856   14:57:59      2           0
+    4      -211.361   14:57:59      2           0
+    5      -211.338   14:58:0      3           0
+    6      -211.337   14:58:0      3           0
+iteration    LogLik     wall    cpu(sec)   restrained
+    1      -258.941   14:58:2      1           0
+    2      -224.612   14:58:2      1           0
+    3      -214.435   14:58:3      2           0
+    4      -214.253   14:58:3      2           0
+    5      -214.245   14:58:4      3           0
+    6      -214.245   14:58:4      3           0</code></pre>
+<pre class="r"><code>Pred &lt;- data.frame(CLONE = unique(drgphen$CLONE))
+for(i in traits){
+Res &lt;- data.frame(CLONE = names(ModelResults[[i]]$U$`u:Add`$trait),
+                  gebvs = ModelResults[[i]]$U$`u:Add`$trait,
+                  gegvs = (ModelResults[[i]]$U$`u:Add`$trait + ModelResults[[i]]$U$`u:Dom`$trait))
+colnames(Res)[2:3] &lt;- c(paste(i, &quot;gebvs&quot;, sep = &quot;.&quot;),
+                        paste(i, &quot;gegvs&quot;, sep = &quot;.&quot;))
+Pred &lt;- merge(Pred, Res, by = &quot;CLONE&quot;)
+}
+
+phen&lt;-read.table(here::here(&quot;data&quot;, &quot;Dados_Finais_2020_15_locais.csv&quot;), head=T, sep = &quot;;&quot;, dec = &quot;.&quot;)
+
+TraitsMeans &lt;- colMeans(phen[,8:12], na.rm = T)
+
+PredMat &lt;- as.matrix(Pred[,-1])
+PredMean &lt;- data.frame(CLONE = Pred$CLONE,
+                       PredMat + 
+                         matrix(rep(1, nrow(Pred)),
+                                nrow = nrow(Pred))%*%matrix(rep(TraitsMeans,
+                                                                each = 2), ncol = 10))
+# Table 1. GEBVs and GEGVs plus trait mean estimated for each clone for five agronomic traits
+PredMean %&gt;% reactable(defaultPageSize = 25, columns = list(
+  PTR.gebvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  PTR.gegvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  PPA.gebvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  PPA.gegvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  AP.gebvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  AP.gegvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  DMC.gebvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  DMC.gegvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  DRY.gebvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;)),
+  DRY.gegvs = colDef(format = colFormat(digits = 2, locales = &quot;en-US&quot;))))</code></pre>
+<div id="htmlwidget-37d34a0cfee30b676581" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-37d34a0cfee30b676581">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"CLONE":["962409","BGM0004","BGM0005","BGM0019","BGM0020","BGM0021","BGM0022","BGM0024","BGM0029","BGM0030","BGM0032","BGM0036","BGM0037","BGM0044","BGM0046","BGM0048","BGM0050","BGM0052","BGM0054","BGM0056","BGM0061","BGM0062","BGM0065","BGM0067","BGM0069","BGM0070","BGM0073","BGM0076","BGM0080","BGM0083","BGM0084","BGM0087","BGM0088","BGM0090","BGM0091","BGM0093","BGM0096","BGM0116","BGM0119","BGM0123","BGM0124","BGM0126","BGM0130","BGM0132","BGM0133","BGM0134","BGM0137","BGM0140","BGM0145","BGM0150","BGM0151","BGM0155","BGM0156","BGM0157","BGM0160","BGM0161","BGM0162","BGM0163","BGM0164","BGM0167","BGM0168","BGM0169","BGM0170","BGM0171","BGM0179","BGM0184","BGM0185","BGM0187","BGM0188","BGM0189","BGM0199","BGM0202","BGM0208","BGM0210","BGM0211","BGM0212","BGM0213","BGM0214","BGM0215","BGM0216","BGM0220","BGM0226","BGM0235","BGM0236","BGM0237","BGM0238","BGM0239","BGM0240","BGM0247","BGM0257","BGM0260","BGM0261","BGM0264","BGM0269","BGM0270","BGM0277","BGM0281","BGM0283","BGM0284","BGM0285","BGM0286","BGM0287","BGM0288","BGM0289","BGM0290","BGM0294","BGM0298","BGM0306","BGM0308","BGM0314","BGM0318","BGM0323","BGM0324","BGM0327","BGM0336","BGM0337","BGM0342","BGM0345","BGM0349","BGM0352","BGM0357","BGM0358","BGM0360","BGM0364","BGM0366","BGM0368","BGM0369","BGM0371","BGM0382","BGM0386","BGM0388","BGM0389","BGM0390","BGM0395","BGM0396","BGM0398","BGM0399","BGM0400","BGM0407","BGM0408","BGM0410","BGM0411","BGM0413","BGM0414","BGM0420","BGM0422","BGM0424","BGM0426","BGM0427","BGM0435","BGM0438","BGM0439","BGM0440","BGM0442","BGM0444","BGM0448","BGM0449","BGM0451","BGM0460","BGM0461","BGM0463","BGM0467","BGM0468","BGM0470","BGM0471","BGM0472","BGM0474","BGM0475","BGM0478","BGM0484","BGM0489","BGM0495","BGM0498","BGM0500","BGM0505","BGM0508","BGM0510","BGM0514","BGM0517","BGM0521","BGM0523","BGM0527","BGM0529","BGM0536","BGM0537","BGM0549","BGM0551","BGM0555","BGM0557","BGM0560","BGM0561","BGM0563","BGM0570","BGM0573","BGM0574","BGM0576","BGM0579","BGM0587","BGM0589","BGM0592","BGM0593","BGM0603","BGM0606","BGM0614","BGM0615","BGM0618","BGM0620","BGM0625","BGM0646","BGM0648","BGM0650","BGM0651","BGM0657","BGM0659","BGM0660","BGM0662","BGM0664","BGM0665","BGM0666","BGM0671","BGM0677","BGM0678","BGM0679","BGM0680","BGM0682","BGM0685","BGM0693","BGM0699","BGM0702","BGM0703","BGM0707","BGM0711","BGM0714","BGM0715","BGM0717","BGM0718","BGM0726","BGM0728","BGM0729","BGM0779","BGM0780","BGM0781","BGM0806","BGM0807","BGM0809","BGM0810","BGM0812","BGM0813","BGM0814","BGM0816","BGM0817","BGM0843","BGM0846","BGM0849","BGM0851","BGM0857","BGM0858","BGM0859","BGM0863","BGM0866","BGM0873","BGM0875","BGM0877","BGM0878","BGM0882","BGM0886","BGM0894","BGM0898","BGM0900","BGM0902","BGM0903","BGM0905","BGM0906","BGM0909","BGM0914","BGM0915","BGM0917","BGM0918","BGM0919","BGM0920","BGM0922","BGM0925","BGM0930","BGM0935","BGM0936","BGM0941","BGM0942","BGM0943","BGM0945","BGM0946","BGM0948","BGM0949","BGM0952","BGM0953","BGM0954","BGM0955","BGM0957","BGM0958","BGM0959","BGM0960","BGM0961","BGM0962","BGM0966","BGM0967","BGM0968","BGM0971","BGM0973","BGM0974","BGM0975","BGM0978","BGM0980","BGM0981","BGM0982","BGM0986","BGM0989","BGM0992","BGM0993","BGM0994","BGM0995","BGM0996","BGM1006","BGM1023","BGM1024","BGM1029","BGM1031","BGM1037","BGM1041","BGM1042","BGM1043","BGM1044","BGM1055","BGM1060","BGM1064","BGM1067","BGM1068","BGM1078","BGM1079","BGM1081","BGM1082","BGM1091","BGM1103","BGM1105","BGM1106","BGM1107","BGM1110","BGM1111","BGM1115","BGM1118","BGM1119","BGM1120","BGM1126","BGM1127","BGM1134","BGM1137","BGM1142","BGM1143","BGM1152","BGM1153","BGM1155","BGM1156","BGM1158","BGM1159","BGM1163","BGM1164","BGM1167","BGM1168","BGM1175","BGM1180","BGM1196","BGM1198","BGM1203","BGM1213","BGM1214","BGM1223","BGM1226","BGM1227","BGM1243","BGM1245","BGM1248","BGM1249","BGM1251","BGM1252","BGM1253","BGM1254","BGM1255","BGM1262","BGM1263","BGM1265","BGM1267","BGM1269","BGM1275","BGM1280","BGM1282","BGM1284","BGM1285","BGM1286","BGM1288","BGM1291","BGM1305","BGM1306","BGM1313","BGM1318","BGM1324","BGM1332","BGM1335","BGM1338","BGM1345","BGM1348","BGM1354","BGM1356","BGM1358","BGM1362","BGM1363","BGM1366","BGM1367","BGM1369","BGM1370","BGM1398","BGM1400","BGM1403","BGM1408","BGM1410","BGM1412","BGM1413","BGM1415","BGM1416","BGM1419","BGM1422","BGM1429","BGM1432","BGM1436","BGM1437","BGM1442","BGM1444","BGM1451","BGM1454","BGM1455","BGM1456","BGM1457","BGM1458","BGM1465","BGM1474","BGM1479","BGM1480","BGM1481","BGM1487","BGM1488","BGM1497","BGM1498","BGM1499","BGM1503","BGM1515","BGM1518","BGM1519","BGM1520","BGM1521","BGM1525","BGM1527","BGM1535","BGM1537","BGM1549","BGM1579","BGM1584","BGM1585","BGM1586","BGM1596","BGM1598","BGM1604","BGM1605","BGM1608","BGM1609","BGM1610","BGM1619","BGM1621","BGM1622","BGM1623","BGM1628","BGM1629","BGM1637","BGM1638","BGM1639","BGM1643","BGM1645","BGM1646","BGM1656","BGM1657","BGM1658","BGM1660","BGM1661","BGM1662","BGM1666","BGM1667","BGM1668","BGM1669","BGM1670","BGM1671","BGM1672","BGM1675","BGM1677","BGM1679","BGM1680","BGM1683","BGM1684","BGM1685","BGM1686","BGM1689","BGM1690","BGM1691","BGM1692","BGM1696","BGM1697","BGM1698","BGM1700","BGM1701","BGM1703","BGM1704","BGM1705","BGM1706","BGM1707","BGM1709","BGM1710","BGM1715","BGM1716","BGM1721","BGM1722","BGM1723","BGM1725","BGM1726","BGM1727","BGM1728","BGM1730","BGM1732","BGM1733","BGM1734","BGM1737","BGM1739","BGM1743","BGM1744","BGM1745","BGM1747","BGM1748","BGM1749","BGM1753","BGM1754","BGM1756","BGM1757","BGM1760","BGM1761","BGM1763","BGM1766","BGM1768","BGM1779","BGM1782","BGM1783","BGM1784","BGM1794","BGM1814","BGM1816","BGM1818","BGM1819","BGM1821","BGM1822","BGM1834","BGM1835","BGM1847","BGM1866","BGM1880","BGM1881","BGM1884","BGM1942","BGM1956","BGM1957","BGM1962","BGM1980","BGM1985","BGM1999","BGM2017","BGM2018","BGM2019","BGM2020","BGM2022","BGM2028","BGM2030","BGM2032","BGM2042","BGM2043","BGM2044","BRSCaip","BRSDour","BRSForm","BRSGema","BRSJari","BRSKiri","BRSNovo","BRSPoti","BRSTapi","BRSVerd","Cascuda","Cigana","Corrente","Eucalip","FBranca","IAC90","OlhoJun","Platina"],"PTR.gebvs":[19.3198911689561,18.165125435194,17.0151826614923,17.2395609952181,18.1247182795265,17.720253047207,18.3669164792766,17.9865988266596,18.8059576362201,18.2895134869156,17.2309643661617,18.2794440454988,18.0048914187805,19.4284534851305,19.5186172781414,19.0501849177892,18.7624883017478,18.8099240074149,17.4068744418805,18.781446682717,17.4922804917265,17.340213865968,18.3074656470694,17.0156081227204,18.9044466924729,17.3889654470944,17.4131512940051,18.1824370848016,18.9351887561356,18.3768034579866,17.0452007788087,18.9617256166903,18.1527384799838,18.0110258396444,18.3754669534767,19.6718601138192,18.6895108288454,18.466085934328,17.8593082963712,17.3304155140827,18.1004438548107,18.2816649889847,18.42318325863,17.0712709188893,18.2314330542391,18.0953160182854,18.3198341071175,18.4393631150313,18.1433128488161,18.2577312566302,18.2059896155415,18.5382468193033,18.2625133871325,18.5143497141993,18.1474244253321,17.7768220623686,18.3173562419157,18.4746812111227,18.6976613086598,18.4389576893551,18.3533141603874,18.1496661586252,18.6440289776321,18.6144939067396,18.4650253555241,18.8751576725215,18.3088571468545,17.4902858034758,18.2383066055496,17.7157518061066,17.4781212092807,17.7445953016643,18.4615278248913,18.4639552304996,17.7290833480064,17.6816500333074,17.5358380150057,18.1909309956514,18.1545502821357,18.5370511960414,18.3673482151318,17.6084745120177,18.5702215135881,19.1507086870535,18.6166813089501,17.9747181185677,17.3001766635555,18.7904385075848,18.5174888904971,17.3575220345939,17.4344820837003,18.5689118521022,18.7615490834628,17.349105115551,17.4426492986932,18.317073540891,18.4996304671878,17.9066932614937,17.4122218083285,17.3160203666711,17.5118056714656,18.5947716094765,17.5244463570289,18.2491313424473,18.0046747353036,17.3805264198728,18.6173351522385,17.4442108914881,18.0826144165184,18.8326526136965,18.5807786184894,19.6575882401894,18.5541427894028,17.4220803577203,18.1161371732417,19.0532931204782,17.1569674938935,17.3629959664371,17.4714624936199,18.3930406405896,17.6962905164633,18.0008364855266,19.2993729319337,17.588190770128,18.4255299720739,17.7165697709127,17.8403268266313,18.5563840888244,19.1287951808656,18.0719913468184,18.5745480426858,18.6093382427242,18.4345420192666,18.074401212587,18.5032856853099,18.442770199604,18.4726808631034,19.1422587776011,17.6856610889358,18.4790585403573,19.172829813154,18.8777409956883,17.9084010304618,18.231450524847,18.2323491613875,18.4621944112762,17.2293124484106,18.4820844318392,18.4505378298188,18.6338941703995,18.0049848315714,18.5590362155372,18.1078649014549,18.6209398954102,18.313301211926,18.4913507060789,18.486846766984,18.5123631315836,18.6483599891282,17.0890968878901,17.0786825257408,17.6022692288828,17.5280123681688,17.525373702827,18.4611846534841,17.8429675122701,17.9622400024792,18.6750075591759,17.4781788414218,18.0107648176365,18.483214939815,17.1085800562572,18.7648539680148,18.5836243996698,17.0550956072033,17.2727551330472,17.387012796723,18.2307414327229,17.3635584375039,18.1370421319631,17.6730536673817,17.7651338032895,17.7278380295901,18.2815470324356,17.7189028526321,18.9194079381052,17.646130314042,18.1158027501871,18.460213732787,17.8918030089059,17.7900163599465,17.8199732461291,17.7933589158801,18.8720291793561,18.2928686875109,18.3260922665891,18.9258585683047,17.3473930680876,18.5359267405036,17.8831357088694,17.7877928891569,18.7449321256887,17.7293552473595,17.0345087286376,18.3075217511854,18.3261499962426,18.4433290295477,18.5863519108688,18.4771278979954,18.5094715702311,18.5423717425621,17.8289398575047,17.604727856053,18.1378758595273,17.4919827482846,17.4729213441293,17.4108013160968,18.5167729895511,18.4344065255053,17.3447317760295,17.96263425629,17.7242827833139,17.6569528927358,18.6995497333734,18.6811851266508,17.5126191363906,19.7190138411723,17.7916650212962,18.7436704497508,17.0494604737972,17.8183906106879,16.8928136479471,19.0161077385165,16.8365419279115,18.5187429989491,18.0690658900576,18.1003302509827,17.3420537668355,16.7805360061432,17.5189218647146,17.7482153799625,18.0309023933725,17.659934759433,18.0045454100895,17.7417400000286,17.9612044696819,19.2170421141443,19.178116154829,17.5174852253796,17.6694380276745,17.6675681671495,18.7190208655116,18.7320397221956,18.6164386503944,18.3248897699393,19.2761390646941,18.4879992177329,17.7339867948274,17.6708543540755,18.4601073857529,18.7772673711295,18.477031026064,18.4918700268963,17.0559654787771,17.7225265906151,17.6681899700926,17.5512701350726,18.3672582344918,18.6949894505841,17.3540391713984,17.8677430274938,17.7530674543423,17.796553979981,17.3842134836439,17.9204580034128,18.4597641376269,18.4825083953006,17.8502110258868,17.0469644750464,17.051652520209,17.9008593596401,17.5713156533494,17.2405813677594,17.5881011636163,17.2986617434683,17.5350184104645,17.5248689358572,17.1846568285575,17.1058253663671,17.0467902721538,17.1101305343911,17.0512892659591,17.4627470853276,17.3079504728179,16.9546687804351,18.0278748351713,18.0208749127271,17.3310833684772,17.616267135233,17.2880704353666,17.2849435922158,17.5762546635448,17.0547682070212,17.2927359825524,19.2440348649837,16.9416867316139,17.274955041596,17.7433802970154,17.2759655087345,17.6608211266916,16.8634941566557,17.2235648987916,17.2003326263848,17.0106446541821,17.5653515119606,17.6513748069726,16.9667331007024,17.267239651785,18.1363613651196,17.2525631783165,16.8053549779555,18.086835615637,18.0557344312577,18.4742235549807,17.4458075084688,18.7224735491842,17.7549608616603,17.7521638183235,17.4139442135003,18.1188078639603,17.4281181190725,17.4728416733323,18.4686857482509,18.7631350539264,18.237532907538,18.8588447041425,18.1489925765168,17.2429358442309,18.4246737421972,18.2279459222447,18.0889413830082,18.7143380194389,18.9063397195141,18.1793997763703,17.7317055447293,17.6512743389744,17.6652515601425,18.2198343390203,17.6556630622859,18.4859281435108,18.3398337760265,17.2197344242842,17.729171446129,16.7886773143248,17.4903083684806,17.0414156850476,17.7453855946965,18.1385496989988,18.4873534674,18.9437801749308,17.4308628937465,17.4155874132351,18.9471669990267,17.7722027450304,18.425221924677,17.1675610583275,18.2366402611854,17.4249381615106,17.5759392992771,17.7215250855697,17.8039712952287,17.8947195613782,17.8462883576941,18.5799852201525,17.5887084471875,17.3245117970133,18.2412942978826,18.433997573204,18.440073007798,17.5978595725676,17.5832605457604,16.8761437131959,18.8311950454945,17.3037473936813,17.4132667890554,17.896870265187,17.8796125340163,18.4695897671748,17.9069950360745,17.9455038363037,17.7338553544308,17.2099988544158,18.4421160682881,17.5581206023997,17.8694260935749,16.6017133756844,17.0388361052624,18.9218352744793,18.4716865876777,17.7775088346502,18.0139412632501,18.6246044198665,17.8859037322296,17.7222372150161,17.640940066542,17.657268923707,18.4503697016233,18.424380220554,17.5437707016398,18.4536660961065,17.6236931422063,17.8477251677611,18.0207489633592,17.6423085108348,18.203000319,18.2813678874968,17.7875492980984,17.9336084583693,17.2549869900392,17.9940815543195,18.3678440829266,18.9725072865929,18.9647894169414,17.0631491294854,17.4638539008496,17.4494063346642,17.5324247242603,17.6100998090859,17.7229964339653,18.3210692392151,17.3483307824754,17.7299580534888,17.0972988907392,17.4608749723476,17.0656432414935,18.1307135066086,18.5305810034853,18.5352489111798,17.9695201198478,18.1462507865998,17.4674059714617,17.7055547666552,18.463224804683,18.0405164743708,17.707523876225,18.5205335226299,17.701490056776,18.1177087824338,18.945590988083,18.1358112411386,18.9653448699267,18.2505420134273,18.2551431608839,17.6746346693435,18.9335245812188,18.1637902223589,16.9038032079745,18.0735404450102,18.4068859099893,17.8590492316842,17.8531585278668,17.6614486551786,17.6554073115455,17.5892926024303,17.8046786740111,18.1472012015453,18.2187240911692,18.5386802405766,18.2583608211077,18.2261180886457,18.4318572164759,18.1328914790477,18.5872447419903,18.4542432546548,18.7456026091636,19.4369010947039,17.6772955869708,17.7729038423703,18.2260751176519,18.4962637276445,17.5511926630235,17.7037308844093,18.6498537337672,18.2364933295087,18.8992763531954,17.8744446011093,18.3313106506446,17.5875401232828,18.512938601336,17.6934955752303,17.2997127654717,17.7308216118588,17.326363364073,17.7269123805747,18.092617817822,17.6777429365725,17.7096609857969,17.4144152084309,17.736489732541,17.2967671167845,18.099262061292,17.7174845033679,17.9130502490695,18.0919607953272,18.5576360778127,18.3818894862715,17.324459955956,18.5955330501067,18.1585188590601,18.3767654725343,18.0604933570225,17.9871055500135,17.59432030872,17.0758812868109,17.3009512926599,17.0562646292787,17.0585509712759,17.3274127811863,18.5608582048026,17.3649344493147,17.1894185209234,18.9836090644969,18.1786832093352,18.1557512351365,17.3714285165115,18.2621501650563,17.3292733147075,19.3514071987655,18.3098465178713,19.1693754712836,17.5433214680405,17.7880614662513,17.8950877728631,17.7167638081499,18.289281602507,17.6929998390047,17.5546651584493,17.7875267530642,17.7399166511098,17.5408440936029,18.0602767817316,17.7524048604366,17.7870855213002,18.0811766229585,17.7521579552916,17.3388882331917,18.0759104162286,17.7183315324774,18.2638040950984,17.7470146447074,18.2724455256884,17.784650370561,18.0826045257038,17.5433949875839,17.7874978874649,17.7803948107103,18.2982540230384,18.7233923406531,17.3226325704172,17.8107215456725,17.7009188240996,17.6612713124155,17.354990627375,17.7625013990486,18.347989516366,17.2324611467493,17.7032306227478,17.7050359744532,17.4192960705644,18.4841419096307,17.7086642880241,17.8183659751738,17.6126859609702,16.9333879709776,17.3316785944855,17.6668326564833,18.6517187965641,19.5797900526544,17.8984394235889,19.2830320315451,18.537555508661,17.6578572175689,18.8028729066397,18.2361970305907,19.3316106359576,19.0766214132518,19.4871682208395,19.3035469776749,18.1718236751072,18.3659947614955,18.1383762884622,17.6998722244886,19.1987123699257,19.4230057069727,19.6168232961697,19.4540474830111,19.0783885172229,18.1486063984061,18.5142472409356,18.5188866415156,17.7042116189396,17.7374939399324,17.9266033874573,18.1328811150571,17.9962557758052],"PTR.gegvs":[27.3399518627015,16.3167031029627,10.3404448317042,15.4373035901581,20.0780685762437,19.8286771187966,16.6441958179397,16.7727024343168,19.4573754518133,18.9702967651395,15.4440021643458,18.0461739828703,18.252836956354,22.2138813306048,26.8877623017347,21.342635003685,24.3872650458484,20.3665380059525,14.2845006590262,24.301997546641,14.3476137000554,14.3942290100277,16.8692037154761,14.0750042960084,20.0768144170615,13.7651590572936,13.9151528891452,16.3153568522972,20.2335018288424,20.1675416601816,10.7105825791429,21.6560653759136,19.2692653088945,16.9610570313962,20.1538671338259,28.1162641819868,21.8612423677614,22.7230129749886,14.8066898511894,14.7301342485457,18.4973276614036,16.9629128316852,20.0354437563056,14.2131949590006,15.2690032130035,18.0664735159396,16.5674595391172,20.2110862088314,21.2837611482667,21.7055982560288,16.8715267732517,21.0232864458532,21.3122004473595,20.6555676508733,19.4011480012224,13.2157967418248,18.8044945251477,20.7134406151277,21.467792394227,20.654775365027,18.4525713679161,18.0136997429361,24.6485117810677,25.4215973723445,17.8465176975037,23.3602779493577,21.9444555367791,15.5930804533152,21.4235092675828,19.4170163743474,12.8429106310554,18.2597223897188,19.9557758872122,19.8978447017069,17.8896352353054,15.8465561322747,14.4595729645208,19.757585585177,18.9991233063742,21.7271531314569,18.0527540892431,14.5769382825251,25.1693137804931,20.3052233228765,25.2918068671524,17.539384004381,13.9892368809412,23.6211241391914,19.0537213315369,13.7911872458723,14.1262584785697,25.3191960667086,21.0070427195239,13.7903253698217,14.521326164112,20.2600681098277,21.8687952736783,18.445499044371,14.6073595667063,14.4934809005088,14.4970027565628,25.7196887605056,14.2857814598754,20.2133127843052,18.214476445442,13.1243277627894,20.0492572197812,15.1044060230218,18.1516240034716,20.443264695781,25.17135426613,27.9905273059112,19.8471990607961,13.5236848568247,21.0994217756536,24.1260887453832,14.6537955545954,14.0469616163465,15.3558110722104,21.1343082877829,16.8919988632359,18.4460643288146,27.0249841843592,16.8709766421677,21.0694923193232,17.0036944027371,19.9807924237277,24.9769029924299,24.9059912904961,17.1810297691499,18.2483449963089,25.4396093675079,19.8844138168943,18.3513755471681,21.8113003846229,19.8487318410884,20.0639340446949,20.2581202543992,15.4002332286679,18.7554786095821,24.113994341571,20.5979062476688,14.6142217444209,19.8836226797531,17.5906379964967,20.5911373053458,12.2782198807597,17.752458968433,20.5882690120959,21.2638014188239,18.634609691981,20.1639831077678,16.6953726474475,25.8977405177278,19.1762648436082,21.0256464018057,20.7002797919416,21.0876915757653,18.8560854147876,10.4431537839206,10.8533494507351,14.9824657775369,13.559082988745,13.3853856329608,17.6220355915009,21.2639045279835,15.1123167433404,19.9139642681645,15.9333330068599,22.0956995388771,19.9607866969822,10.7014065817187,22.4338360491798,21.3124632114513,10.8158362944816,12.7736264919002,14.6176640219085,17.7172992287158,15.0849336936136,18.083072826514,16.2223221896704,18.0317979679202,17.5663303782889,17.8474292837974,14.8781090339462,20.4440384200122,16.3294194260292,19.9777262425873,20.3310574991698,17.0210773730691,13.8655971487983,14.0106190831562,17.6924388962096,21.440069509827,18.7779731902364,18.8283716516251,20.2479194506547,13.7875298740996,18.4785097465054,18.5088339963093,16.1076304680998,23.5270274396547,17.1902965235247,10.6539357795195,18.6885590544623,17.4118480026593,20.2883938168563,18.8011043545516,20.0809455100877,20.3463065987925,20.5983400001836,14.6716742543153,14.9836810729934,21.5132473748141,15.2270198616837,14.4629096046756,14.5060490799167,20.490827205456,20.5605715950041,15.9250580952461,15.3075551012285,15.1720035317,14.1810921677802,15.5874929207465,23.326991219061,13.8995021998702,28.3422135802361,16.801216108959,20.8040729710743,14.4232053131615,16.5809008088188,12.5658932121013,26.4293120870724,12.3191040925061,22.1917780003758,20.4748943959772,14.0165033188138,13.6774784045887,10.3317670590839,17.327896302105,15.4702592869571,16.4529804497027,17.3410015468231,16.159285490346,15.4729544143169,17.1858979611191,24.4838722241133,24.1907176441034,14.4134095201815,17.8034576996585,17.7345165837349,23.3214412073096,22.9122110952442,22.7782605448542,19.9862478972839,23.7455855079626,17.8877326707146,16.582438850062,17.5433393290138,20.9699367513509,21.2841747747339,20.8661893766962,20.5596885573398,14.5912236485878,16.9067793138127,17.379870461904,16.1823521591121,20.5386821897552,15.7246473023223,13.632662645638,18.287694530441,15.2505570330803,15.5201719550289,14.30518997137,17.4025325901814,20.7087426282417,20.7490532192931,17.9477417516747,14.2665980113996,14.5549313091549,17.2221886371408,14.8698875510562,14.1317722896054,16.2491592961322,13.1755130478229,17.4818661041126,17.5052164385051,15.1262000249535,13.4830052379126,14.1545360286636,15.1132315595846,14.3377678302896,16.173662887047,13.3072261481112,10.6557626282231,14.6619368581461,14.6211651613687,13.1450226704144,16.097704479331,12.8345840783645,13.0221679755089,16.9072585049149,14.2263333530578,14.7195697447949,27.6248504191169,13.6716914345502,14.437640273713,16.4290118333973,14.7798395233303,16.0169735788995,13.1955297154172,13.051299513626,13.1569148460263,12.3001959802118,15.0386608357825,15.3042533129936,12.8837202017156,15.2556298799988,21.2640029527826,14.8970230520798,10.971024521627,16.6275129954766,16.5900484119615,20.8390261893843,15.7646705377565,23.2650313716849,17.7046693888553,17.7277775911228,13.5649032262075,16.828579241183,14.873888521851,15.5170853815914,20.8608340310997,24.1660241177911,17.9012323732538,21.6671307581788,19.756521476601,14.8755090561599,20.9647108456692,18.4651569798842,20.4067885097439,23.2290755534105,20.0344160638538,20.5724614894825,17.9585652603996,16.566711389831,14.2315841335727,22.9832464259824,14.0881678415544,20.2339184962032,18.842748767306,14.1357524092574,16.5410529890399,10.2096131058103,15.8912931761721,14.0978675495528,17.5719191326921,20.9751986758715,21.2229514420487,20.7406534004699,13.6418226296396,13.7184960136231,20.537342910035,17.9438232890224,20.3417539682737,14.2079915259211,17.6974077945212,14.6826074968729,15.5272136495058,15.0731745003437,17.315009652804,17.0701959244198,16.7070731143169,18.9382639781372,17.6267306034326,14.3790388683483,20.4788591442814,18.8942062306484,23.2440179680477,16.7680415008974,16.6383272819434,10.9297254418528,25.0599756274052,12.8518938326683,13.6022127104822,15.1529412872511,15.0255939802507,19.0375375193284,15.1748724603508,16.3860259598492,13.2530316652816,13.1531624578778,20.4250058273888,17.348581567856,15.9546203638555,11.2580181214725,10.6412839421939,20.1525367621233,19.4497294504523,17.924737889437,18.7282242443812,18.9078721857314,14.9459214623656,17.8880886743196,15.6311976485925,16.0599824046165,18.080941551474,18.7509639649449,15.6842769657023,19.0398363819207,15.3956601783446,17.3543408152974,14.1935028076631,16.6661947862412,17.2407221159221,17.7502798687381,19.1547919790154,14.83356104398,15.1359760439651,20.7498495610241,17.7090904922545,20.458003336651,20.4343427869157,10.7431580799441,15.2138094806203,15.7969376896998,15.6444756616031,14.6278326563322,17.8522387009008,15.928628372861,14.7147893179082,17.9116600051854,10.8391018234425,16.5952804107586,10.7286409553346,19.2983868851571,22.0660416969852,19.1152151966817,17.0918261916429,15.7362883272232,15.4753870748975,17.7770313481133,17.7285999859601,18.2013483971882,19.6493976792633,21.8159603372503,17.6975078478293,19.048665576616,20.0027614030828,19.3923664791836,20.450379488879,18.4170971394067,18.0737821373366,14.8424797929867,20.3143548938643,17.3000608332807,11.3271315495404,16.5028079347765,16.3410835971409,15.8041221759031,15.8077561866268,17.6510732099927,17.7410140918052,17.1050667329282,19.1765998846859,16.14145190609,16.4698893455773,21.9157345432232,20.1993408238259,22.7472226355255,18.7878356900348,21.3493628370821,19.0221605787248,20.3344599844206,23.9803702791016,30.9756843484518,13.9623646304279,17.7900795886653,19.1537945653471,20.9928318161612,15.5336375385743,19.6409568703837,19.8239561142539,20.6732977988734,20.2188501187619,18.1059502463387,18.6061560427456,14.5213144380892,18.7863608272876,17.9075865739155,14.2700166472392,16.820877661965,14.8573078469799,16.8479068664323,18.9429976920158,19.5046882945207,19.4411338717214,13.6611319228382,19.7252710547888,14.2564544428335,19.0542247308715,17.9237512162886,20.7606904047592,19.9819890280545,18.5485534066906,18.2805667126642,14.5316043420901,25.4725150356106,21.558188776515,19.2704266738526,17.1146193481996,16.3112022723277,17.3855904560005,12.0750864808834,14.8964531462236,11.9588829535965,12.1143861840811,14.5191387409233,25.195781825131,15.7869855709044,13.6407389329676,20.4139217059461,21.4751310064454,21.5947738909661,14.9013063845236,20.9763627871408,15.5449968681718,29.8217182228923,25.2200558770497,28.8116360612279,13.5285809568657,15.6710202659078,19.4017032123957,16.9564593505134,20.7923454434942,16.5850581942986,14.0373717230897,17.2584141590876,15.5704439932224,16.1285093865252,16.2272347162876,17.0583290092325,16.9115924383611,19.0701269875658,15.4434271346067,12.9061110407441,18.5723764606033,17.990437343471,23.2076614351867,14.7657164661205,20.0329406363895,15.4782233023938,18.9762355695855,13.5949376967465,20.1009071856685,20.1050395429988,21.0121245796126,22.0014237467759,14.5643248522903,16.9223353213118,17.8396487873982,15.7966391968873,14.3444016570263,17.1168111309803,17.6515902669995,14.1014311534662,17.4903682725601,17.6403266212539,13.6979953537516,21.9325416137007,17.9085617149827,17.6311838737047,18.6511852972288,12.320850272716,13.2694551033063,15.6024436828608,19.2215787326649,26.952714354794,15.8851380683644,22.9624094026354,18.5180109147078,15.3425134093196,23.3356821131259,20.0659440869075,28.7942759998211,26.1599539290929,31.4704555806233,29.1957304414965,21.7784490912464,26.6952901839465,20.8807354049048,15.6013513349979,28.9217101684889,29.9736751137586,28.796929017726,31.5849571333015,26.0397506513467,16.1605182804928,22.7281953283292,21.6516408527764,15.9665084022366,14.1706051806384,15.6629534375675,16.3122085639961,14.4443407598456],"PPA.gebvs":[27.2880266248456,23.8592803545949,18.3164744998397,18.4149543048227,17.3638815543839,21.8120042645347,17.6215808158881,20.4767227282602,25.4469641832069,23.0526010870832,18.9090610630687,21.7025142117478,18.4784420696153,23.8374683099548,22.8958128007857,22.9186959878223,21.489465591017,20.9897408401767,20.3857019800002,21.5856795815907,19.1699571511945,15.2397789205093,20.5142802929537,16.9565116672962,23.0554620560308,18.8096865637408,18.7866482990011,23.978347194046,23.0131249238427,22.9858076829998,18.2947747829304,22.7428382361479,20.0885961002327,21.0032509089385,22.6561807511218,25.3491046585372,27.3541236048828,24.684003438324,21.1344444665019,15.2731474220805,17.0203087592282,22.1973322453161,22.9453265545603,17.2760657777069,19.6017432271933,21.3898344354507,20.503157111342,22.521276902851,21.0352479512225,23.4590738277751,24.3236058522995,19.7276332474638,23.3441310020562,19.5871039272074,20.2847213054853,20.2746004692901,22.5507417676893,27.1234563718755,22.4115132906326,23.2180059154436,20.7975765034316,21.9090400065482,20.9996953905301,23.4265925332236,23.3606940408128,21.1866824299518,23.5542172535784,16.6573269866968,20.405568679563,21.7389465013222,17.9719850691726,16.9998788600098,23.2500964437244,23.3383741292276,16.1836795735297,18.6683506743085,17.8892339585707,20.4326374158407,20.367131620484,22.6064416511527,22.5750998273333,17.7309328098802,23.0482576112215,21.7729283890585,23.2291875672365,22.9261003777664,17.7209872376877,19.0485509836506,21.6008610763972,17.3653180289691,18.0746601057268,23.144192714967,25.6865175228434,17.4183970754934,19.094919637024,20.2558782120141,21.9825252983942,21.0378417722408,18.8523475602394,15.1896010610866,17.5430879373559,23.2614200302633,17.6920043071798,19.6707113948183,16.5500947424346,16.9789734320214,26.5824071813186,16.3171234732143,16.9921829005664,24.7392387626661,23.2400042322175,25.4769477785173,26.1461305862452,23.7292160435121,20.3534405152681,22.8509910727429,18.6083692193175,17.3850339709156,16.3602747179626,17.7770332070005,15.3644770473704,21.7844430315842,27.2108445284022,18.1741386163067,22.0147361892275,16.2131293989904,19.5024376514136,23.1718955123184,22.340128396478,24.0820668377551,20.2480040053271,23.3547554100577,23.1734409122675,17.0991428696243,20.6274999549455,23.437471270587,23.4211318592635,21.8786555351176,15.1886548031617,20.02142912943,25.336239008352,24.9494156689558,17.9583032482368,17.8354643782469,20.0608438270789,26.9389146712347,21.2735265524624,19.7416456507427,27.1339369043551,19.3354097159541,18.368245978455,19.0819398270954,17.1618976233729,23.5251543193965,21.2547626059222,19.4181105583306,19.7192417761305,19.566906753159,23.5682831224997,18.2934063664797,18.6119101593852,17.2437340144016,19.8780343067951,19.7868947949387,18.9635423612649,19.8593446720813,21.8181119983913,22.2705391416042,17.9346367189219,20.0032351952691,23.5790229603838,18.1260272417789,23.3114685110662,22.6439188134141,18.4593742216187,17.4719768506924,18.2793385228091,20.8966399073338,18.4169460449648,19.1474252692402,17.5588263428088,19.3299992659847,19.2742134820157,20.4324161962713,16.3004851021731,23.2919550810096,20.2149204748524,17.4491891867878,21.8062607566261,17.2066468943512,19.2163048966406,19.3983975137326,17.5860892197577,24.4039264884111,24.0444062940202,24.2024000934633,23.1154616327466,17.4474335589476,19.0257504918918,17.6383024377444,16.0895306696672,24.1574413510598,15.6565696985434,18.5158170009972,22.5009012275469,21.5892551236647,26.9015885739524,19.055689644291,23.4927528303154,21.2518957525719,21.4295718696793,20.8835983768982,18.2975981450221,20.9462461769401,19.7643773000899,17.1589943767099,17.2786699689965,21.6837508796294,26.6736885524429,13.3442728273661,21.0386379211131,17.1216317283599,18.6556744367204,22.2647469691329,18.7990793817202,17.4092402706116,25.8057803063133,18.3621314120487,25.3207842650402,16.6691883442461,19.2123992764473,18.3467521088097,23.8762900310234,18.0292905099877,22.7872391817092,20.4253430652302,16.8620160008258,17.2838835005126,15.7581472750436,17.244892520596,17.1425646305177,21.4180436076995,20.6111621943397,21.1352808886584,20.1788985639534,23.369790027265,25.5354701409312,25.5366921847799,17.8961188943532,20.5566851932281,20.715430919093,24.060141147618,24.0080711377412,18.468948593861,21.1362460817828,24.6725461694235,19.101425743307,20.5905159405674,20.6581647745462,27.0769205859234,25.7744487248088,27.1024578432583,27.1550234117299,16.3480007813972,16.3073033529378,16.9187570498361,19.309989036765,21.3383364416215,22.2780584264309,18.6030556045279,19.6131713450791,18.7698426916387,18.9366268959079,19.9821573085136,18.4993937626591,26.9643004439698,27.062643724277,22.2294853243216,17.3752172944859,17.2840797943107,17.5423133257807,28.8643703619904,13.1617545281736,22.5174710221178,21.4104087015373,17.3534312804333,17.3717007722522,18.6019763722829,19.8072866640187,17.2323170544164,19.780795053797,19.3021157945323,18.8149293323314,21.4525763281698,18.6366065958636,21.462824116825,21.3800446726971,21.3917822438728,16.7317749002104,21.4098263437159,21.4164542794163,20.2546606143207,16.4982501575266,18.541057747396,24.039334152939,16.0654881205631,19.177913310684,18.1856656789552,18.457263927129,18.7157781188452,17.105695631081,19.5526548168096,19.4081587564553,18.1451234777789,28.6436484459947,15.1585423599747,15.0094381189951,20.4315459711843,21.1508132464351,20.3011835934436,17.0569986634061,22.0147750469687,22.044656479628,27.0910301143972,20.857317148391,24.0393955075466,21.5795665671267,21.5148839036588,23.6991813233495,20.7262897845311,17.2614083781511,16.460759331343,26.9452017571022,21.4290249347298,21.3456896837857,24.3202424010134,19.7582719357242,19.3639048492516,19.7716500065326,19.3949392347331,21.6889658201542,24.4650763876517,23.1058595568036,19.6908444298349,16.0033592185187,14.8645688174473,14.5202106323624,18.3684374586206,14.7024001888724,21.2228999556505,22.6663974169348,13.1678718092373,16.4406329819726,15.7995237430828,20.817365901664,17.0841016200662,19.259868632411,21.9077312923681,27.1939147880483,23.4013998383536,23.8683642667709,23.8436363377579,23.2217643461758,19.7595145562978,23.562157766259,17.7474364172342,21.4280952823449,18.9977482331386,18.2616298525079,21.4513837363171,19.6890110505084,17.8048026093829,17.6906167901915,18.956095955739,21.9414283826378,15.4457835176034,18.1614988022731,24.2176515392715,23.7606701215159,16.9377917575576,16.8844690276954,13.5114607721046,18.9804964284659,16.1022231084164,14.4110379013622,17.284406597133,17.3000733434269,24.4125878411284,17.1650512753059,17.594384215366,20.2294273016927,20.2747466811007,26.8636044270364,17.3325751181469,18.6517714000561,15.3937074730694,18.3521777102319,23.1667279709775,23.7561568449448,18.7817512207712,18.4620948895103,19.0832069763855,17.2653456268333,20.8363471965841,19.6467531903128,19.8595830392972,23.5298840133018,24.307518024225,18.3827426206662,24.498620274944,17.9377161366936,19.5177159746826,22.1642121447711,22.8418861054809,20.628860105331,22.7367379087218,20.9644343884655,17.9655595852385,17.0412906882074,24.3836393285153,21.4964292601735,23.2531025944885,23.2605119454419,18.5561410627955,20.2326091112718,20.944728250142,20.0943873257298,17.7478986451028,20.5875812709799,24.8910827766844,15.4076779920453,20.8146429248877,18.3591552736057,15.7277989082584,18.6116709834861,20.4222044962069,22.4953919525419,20.177686988004,17.585530031468,22.5993493705201,16.4378696539715,20.7198955192512,23.6138148022163,21.0612515654957,21.7576110365896,22.432087280616,20.7293134777163,16.5325336851351,23.0356229360146,20.6048331495902,23.5061147970429,23.1404142030207,23.2568486926846,18.7641406919662,23.2860101892546,20.3023457332416,13.5988050182652,21.9833698414526,22.1652775986374,18.651300946201,18.6306157755736,20.4498495145821,20.3911231396201,18.2988386140118,21.0872287857729,22.3395276591325,22.6442404439494,23.9230981349416,17.0247267497576,19.3200904092434,22.9256437906682,20.9512015162205,19.1024549242668,19.7987853742334,21.4209600676334,24.3247498826994,17.7361164064799,21.6262818359301,23.1844005220984,27.0681973388039,17.8839957449163,21.5454566142342,20.3249650855256,21.325282809413,23.0899390963256,19.5028645264406,22.6486511674801,17.6631356801911,19.9872127631689,20.7161729460912,15.4249388445759,16.4137549152894,15.3171400462673,16.3816047314127,20.3295477222036,21.655481027565,21.7595980185043,17.6090639197196,21.9554129720547,15.2255337593531,20.244014038728,19.0338813984333,25.1300560379426,21.179430272596,18.9869220203201,23.0008476638056,15.3561075728847,23.2230103513488,21.1127869883007,20.0311967843751,15.0332308603448,18.8344429260664,19.026852724067,19.1610893873432,17.5922798204155,19.1380794220464,19.2573493843414,15.4022749519508,23.1541753233097,18.1817154463715,16.9163976863307,23.3302098216863,21.08395772744,20.948989826109,15.3977687300043,20.2407471486425,18.1228755388577,23.0400991119309,17.8402575247189,20.1889413368734,20.081050299387,24.07209254217,20.918174002867,17.663330017461,21.2349068598499,19.2401528746903,17.2978078437391,20.1796602426683,17.0163428336779,18.0305234994659,21.487249771772,16.4097778544445,20.5266968175729,19.4160432200715,17.0176826470512,16.2990207552325,19.8173014459716,20.6408254248956,19.4492501276988,19.7312922313602,16.9296157068573,24.2254774205008,19.3787591749935,17.173952275835,24.9473684842852,25.1020150989114,21.6982512648115,27.5401988983037,15.314050183207,18.3990574286817,20.9332369209121,18.883350939643,15.3594427946298,16.4534627628136,21.5022710312764,13.096856206818,20.7336545503116,20.7604589766775,21.448484336249,24.7839516324605,20.7903655250037,23.5762648476582,20.5370426972327,17.1415621023887,21.3950500177544,15.2046138269727,19.370867316018,23.2926120856364,18.8110359066949,24.6387968456518,21.6838438245301,18.734248301494,19.0908146939237,21.0630853331993,24.45665449499,26.6543584517885,24.6687247597759,24.3047920250598,21.1579838479879,18.7508129057385,22.06709863924,16.4355292084147,20.1401441786106,28.2982088281756,28.511165423858,24.696265914074,26.5384478496761,14.5878272759586,24.7294301731589,22.030226946633,18.8064086172448,13.0386901913332,13.7924455003079,14.6161909762609,18.1592286850082],"PPA.gegvs":[29.2718399977934,24.4079450033643,17.6524304958217,18.1621747829832,16.961488382943,23.698134030167,16.3029346726882,20.8464406940847,26.5663269381791,23.05699774477,18.5733386236265,21.7415619762406,18.1070806698052,23.8764184124735,23.6769896069211,22.5355138804836,21.5594646270299,20.0243803771871,20.2724609723361,21.6808652531437,19.0238234690969,13.8339547787156,18.798840495356,15.7262352184387,24.0772025775754,17.7491525897616,17.7013063405723,24.5778818192658,23.9483038957849,24.2522979778291,17.6238673986442,22.4607581018246,20.5196577520135,20.2580098766631,23.8249136043568,25.6905545864853,29.9987342317315,26.8335196928653,20.7133185090598,13.8499383683315,16.700479570596,21.4627484653427,24.2795284169492,16.0685886447814,17.9788732872113,21.5859363818108,18.8280062894362,23.196215410399,22.9103768008583,25.4064058148873,25.310521357096,19.1172555815526,25.1784560583312,18.8764037584122,20.7940742219165,19.0260930572703,23.0041961970989,29.027425619251,23.1518603686213,24.6539257228192,20.7356336460891,22.4874789892412,21.35087490962,24.9920744443881,23.1905735346919,20.8607676694641,25.0899650512607,15.8238531666388,20.6348198546333,23.4971027385118,17.4341871493061,16.4845786793387,24.7954805172094,24.919842083412,15.404869663051,18.0411860049574,16.8054175368474,21.041349498729,20.7988419388611,23.3201144956006,22.5352563597057,16.8303931074564,24.5178483084412,21.029352393407,24.6397815424936,23.5427357071982,17.305295247457,18.3823036698192,21.6973321909871,15.6768094025581,17.138843924757,24.6264442468224,27.2598367082634,15.8082002823326,18.4500804776634,20.5658544398398,22.0030820596838,22.2747333392534,18.1857025860594,13.7016296971264,16.4245343791984,24.824712456365,16.617920159787,19.9081584474483,16.5720391749626,15.3691819504064,28.3044961373592,15.3380555433967,16.5092801109705,26.525536035205,24.5944885794111,25.8092617506785,27.6685465023065,24.4196542941688,21.3877351830729,22.6977000210434,18.1437039673909,15.7266683243404,15.4472549453336,16.719247842563,14.3892543946799,22.734902853171,29.1813893194284,17.5734311151464,22.3123153134981,15.0679131548053,19.6691853727976,24.6010107208047,22.8707256346624,24.5286587246206,18.4870076959914,24.9765427569059,24.7666717913672,16.746666598222,21.1596873715835,25.0760085817514,25.0784977310012,21.1438489752167,13.8878586290849,19.1282050797729,25.8045283653491,26.8579741606903,16.8373535107607,17.693902940811,18.6545654531771,28.700873422774,22.5635930090106,19.0773303235052,29.1054355353644,18.3951823080252,18.3354630655673,18.0931393933694,16.1699571346847,25.1346451049826,21.2287118134931,18.7159464469871,19.1436318064832,18.9183674003905,24.3125626265308,17.6790234603475,18.0249696937657,16.0562322564045,19.3490366162118,19.1418299659215,17.4927473569774,19.9952583884978,21.6039549825247,22.2505925725077,18.5084185904174,20.7404367923847,25.2376201157292,17.5224537949766,24.1431514668093,22.6927515933987,17.8648646016536,16.2331848366591,17.5447127616299,20.4587338646894,18.14455915691,17.8697403064918,17.1159723481982,19.4294542949058,19.3237737415744,19.0047226279619,15.590319193393,24.3984105501035,20.6693570509519,17.0186156586097,22.2269061166441,16.5331544383427,18.0302685056418,18.2106137209499,17.3642485588811,24.7765511010341,25.585178220935,25.6658814873678,24.0792743428129,15.8663002402967,17.2805604296878,17.2709634433094,14.9246960168311,25.8756806279049,14.8728857078321,17.9415779032054,22.9102850571265,21.0411435752066,28.6279721566348,17.4100409106067,25.1931201451769,20.8594985360321,21.0228203201649,20.7887297249967,17.5484695718406,22.8338111975262,19.8899303025506,15.5137403838384,15.8230475889523,21.4051776743495,28.4344774986834,12.1693151552687,20.8634151633352,15.1980304320214,17.3575228241464,21.9405795181146,18.2373686285548,15.4668779321488,26.2179206778657,17.2230921255571,26.744872481581,15.8752291261759,19.4655390079912,17.9415481016099,25.4472250149929,17.4925671278198,23.7129287723688,20.9695223567168,15.4070374473325,15.6392801946949,13.9948255665338,16.6264744952654,15.3494516807562,21.0796548403569,21.1516817946562,20.6994629377547,20.1465071240992,23.5940918002452,26.1034363310378,26.185516997256,16.8916270549329,21.1779883955231,21.3745705501819,25.6304167417796,25.6223284813684,17.7928268286958,21.5022146750701,25.8464901520164,17.6660141677686,21.1543528319027,21.2541275075198,29.0988906515137,27.4028226893371,29.1193853068782,29.0908808569607,15.2453547023155,15.1536063615867,16.2296443543025,19.5994080326622,21.7359359755884,21.941688964313,17.5543227819135,19.066023623682,17.0499479647599,17.213621519005,19.6752867892598,17.5635572981239,28.9253341706804,29.0184065841959,22.7948575188756,16.2539376796898,16.2561637583167,16.9678029855161,32.4317648173315,11.7274772152915,24.0588022523116,21.1254192636772,16.7812889850888,16.8713110598444,18.1830481122156,19.969941115396,16.0118572530606,19.6242017569254,19.5851839416908,18.4560330343972,21.1974573013534,18.1131819334748,21.1115335255241,20.9073326525265,21.0598585449961,15.7224215228127,21.0438111759718,21.1044963379198,20.3730810079129,15.3628934079212,18.7905021220421,25.7356878071284,15.0910288653229,18.9399884963097,17.0120314400745,18.7496051790248,17.9882548467517,16.3239369442497,19.0899533170795,18.9045238295026,17.5044487798564,32.0680419549108,13.4223684539235,13.6532208025511,20.3400958387867,22.9480074208682,20.1378815376621,15.7915970309468,22.4293812600832,22.428661742627,29.0100223607488,21.2156971710996,25.6024513948451,22.865605991739,22.8790416026747,24.4361894773946,20.1773527356078,17.0250257116331,15.6348412937211,28.9276325477215,21.4441943631119,21.3315666127552,24.7095982251836,20.0146895401059,19.4627138215453,19.0800699388864,19.097819605615,22.0802568988225,25.6886700717103,24.1656631370901,19.8421348260498,15.1271367515158,13.472627381001,12.4816043919411,18.338719533223,12.6348603323859,20.7516911708905,23.113589553701,11.7855054860272,15.2225017150354,13.9901799906433,21.0817903043863,15.8568212506082,18.4692343840205,22.4865018581824,29.2682413230736,24.5486000561186,24.6473955355121,24.7248379968564,24.3358503234307,19.828399074966,24.187473195481,17.0823672719196,21.3250652747074,18.4103444983865,18.1001902762053,20.975710749132,20.8936882179495,16.4193349827986,16.2360574905239,17.366904710543,23.3426514090631,14.1138480739375,18.0809160185549,25.2807497781978,25.577938796642,17.3010211768143,17.3406508446372,11.8294940323905,19.1072958211323,14.9263296566684,12.5848014268608,15.3167452517799,15.4400340812544,25.5104882172244,15.2528374975981,16.7312364343885,19.080751844788,20.1244885876684,28.6715138672798,16.7204782735118,18.1037657606376,14.2961745950351,17.7723793734869,24.2674790464527,24.869198606778,18.738132788192,18.4790400754082,17.5199567788955,15.3442807180695,21.5327424944057,19.7335431543135,20.202624372083,23.4676456140418,25.3028072920196,17.6749758013858,25.5588283111287,17.6319200715603,19.8419572502845,21.180409592874,24.4296593847072,20.6252280525091,23.2684694503092,21.4889315956419,16.8509437626637,16.3533226120792,26.536664890944,20.8149622343959,24.3743862083991,24.4365517143431,17.9965899839128,20.2880496997943,21.4266586352632,19.9008432189326,16.7461793450282,21.2158353420926,25.5416021161181,14.1065584218362,21.4858210132117,17.7696971216146,14.9925099162988,18.0828694116106,20.3509701855967,23.2614559233971,19.8839048627839,16.7320667675871,22.8344102708651,15.6345618021174,21.3578813280663,23.5250955051552,21.8547736029928,23.5050649505206,23.1400194354948,21.3592848819581,15.5736558029135,23.8937621326307,20.6195251997757,24.7199629640136,23.9161098729393,23.967837712082,17.718903721719,24.3803972618557,19.5304290998025,12.0349825569744,22.4036146729056,22.2317346418245,18.0280871689048,18.004821007511,21.0514340452996,20.9370267032049,17.8091223137079,21.6014855759956,22.3146894745192,22.7192556415668,24.5201292992663,16.1395872615873,19.1631664088481,22.9463883049557,22.7291246346534,17.5733935035983,19.4996508837802,21.3793987583606,26.1807147841165,16.5750694905864,23.0071229028929,24.2172079273919,29.0574786722562,17.2695474049819,23.2659389238252,19.2063487798429,22.4372444792297,24.1521141476119,19.9065200043957,23.0247795854498,16.4022263832649,19.1035279300091,21.3282334087989,14.0823122380895,15.2382104599995,13.9840629522157,15.2097912348424,20.1578568991892,23.3377030440865,23.4192043765324,16.0902796994697,23.7229622986776,13.7589483560258,20.0993775926158,19.5728257442416,28.4395956937753,21.785108967709,17.3546218762742,23.1324557794011,13.9658663063087,24.76860517213,23.0350433623302,18.7350183565917,13.4595668819281,18.5146748190435,19.1046766236775,19.0061508896306,16.9236829342369,18.9371749345702,19.1816492064086,14.0442610597935,24.6553928482378,17.8158107045068,15.661324824385,24.3613449258292,22.8664617588763,22.7664304228537,14.0561937502151,20.2251144358993,17.7738692785978,23.8482320135916,18.1428422648766,19.9860515091602,19.0418054807225,24.5466117364756,21.1680733133972,17.3398861480377,22.1975372040315,19.0774230625088,15.245775024199,20.6904561907614,15.6541129184836,17.0605950718516,21.5149115677432,15.2727403947256,20.9154690580433,18.9054264114711,15.1270651204969,15.1575443042586,18.8293684354235,21.2422141319686,19.4479620472768,18.4497340066958,15.9471072516419,24.7329692742145,18.7601846507338,15.0393433259488,27.0507741503326,27.2553119053361,23.0378565523661,30.2711430870277,13.956592731573,17.9438075588096,21.6003119460185,18.3613043436913,13.8589586415,15.3669988998819,20.8518026677679,11.6796642542539,21.3079170981755,21.3139289585098,21.6068482030375,25.9042157826483,21.4602998399281,24.3816689152719,20.4867094234839,16.0901712762028,21.0792683697048,13.5255760136664,17.8482918135881,24.1920584379666,18.32275040034,25.6556680073267,22.2872281903931,18.0386198342754,18.4408445541984,20.9864791483434,26.375664804484,28.422866343685,26.7437623668153,26.3646679855616,23.0626263676017,18.9273362096461,22.7440313719053,15.0173050585211,19.8820268077333,31.3641827017076,31.1674484062625,26.8021701831921,28.2798474703638,12.2834599361651,26.9186548917055,23.1442753863358,18.2441351906254,10.9810303251879,11.4452054642104,12.3141422423602,16.5013713656777],"AP.gebvs":[2.03662993096568,1.84588748459707,1.86070273027187,2.05131778102907,1.82434213268985,2.13260523997154,1.80591777257012,1.87201509587504,1.95412869162771,1.80132249207293,1.90638168680289,1.98668023476287,1.82108079005691,1.99440606208746,2.17345522596187,2.13841445761126,1.88331969319736,1.95753004220178,1.86937240598164,1.9010576702122,2.03373873282999,1.80729807411605,1.81471375269293,1.95693799373064,2.11444637692768,1.94017080180702,1.94868110811375,1.84358962321963,2.1023179879552,2.18938921889395,1.85801168099138,1.93700043390067,1.96661863480067,1.9033957129492,2.1769467729926,2.02894396123609,2.01920100687531,2.01266681862069,1.84091027862295,1.80478173294043,1.70152819109927,1.74157583307616,2.19391765866778,1.97639151379317,1.77982899302082,2.10196142274177,1.81890644348972,1.92639629732688,2.06982514560094,1.97442525024445,1.89463572826894,2.01194804157204,1.97228314623637,2.01088076040857,1.97696087393317,1.88124285229859,1.9330812410717,2.25299099565796,1.9668210831574,2.20442215274995,1.82051960435447,1.96625531593407,1.87608599376191,2.25191668354767,2.00967169900226,1.89560914237237,1.9760123908213,1.88095134599503,2.05966093737848,2.1272419550874,1.84461921646919,1.9168181540257,1.98479031719148,1.98296420629673,1.82496163091737,2.11242311226121,1.9551061330913,1.98764423922014,1.98037378457523,1.9386976079889,1.95000609035466,1.72805201337893,2.23131907347968,2.05287145063528,2.24356859121458,2.19085302663965,1.8394117099032,1.92266123245315,1.88986663533288,1.87326293923276,1.87307741491533,2.24405417604992,2.19594769950154,1.87708107160468,2.23225285348787,1.77544584487846,2.094074727897,1.79966118452316,2.22006232945481,1.79440529592187,1.9399327295508,2.25201070811763,1.94119719982984,1.87335663058902,1.68804217863937,1.74011354641251,2.01285448370377,1.85193234235704,1.69405240431046,1.98602613638608,2.23871474907747,2.04093645902704,1.99711823235045,2.03984839508028,2.06367401272,2.05162508611855,1.90818112820277,1.87059856474541,1.85376454442257,1.87068293356132,1.71137598898921,1.79015271417903,2.02592968554111,1.98559099538875,1.9171456432906,1.79350959657917,1.9512829656005,2.22366281415771,1.96851210217618,2.18267936554639,1.7690803806228,2.25052785946326,1.97412199102253,1.69338440117257,2.05892229093571,1.99813691860955,1.98970789199235,2.05944942285392,1.70708589817296,1.8399671428112,2.01546948960958,1.98014852706224,1.858199842506,1.9364948906614,2.05724176155831,2.23225901482308,1.97619378693511,1.83467667784029,2.25167612902243,1.97343698183913,1.87777672983352,1.99437391474862,1.7488288181694,2.24914564403083,2.01474585492415,1.99808712469796,2.01329818805232,2.01210003351282,1.96219191136922,1.84426077293716,1.86805688639516,1.75564241826568,2.0037094441989,2.00226366701511,1.86871314133588,2.07405270949532,1.67293686460007,1.80579430934374,2.04964684248482,2.25803106639507,2.00452346139404,1.848652902249,2.01999609347282,1.93786322345521,1.86698097837469,1.71202420321846,1.75465336462055,2.14320163908751,1.77191556430994,1.99153223445846,1.75092160012612,2.01064826165584,2.00688454892659,2.0753771943849,1.85467971243026,2.11141639976994,2.03061409209431,1.82077207343903,1.93270342943392,1.90708229270167,1.70969255581375,1.71553547588029,1.7967466670813,1.98722796993379,2.14121108765456,2.15553132132351,2.10714593443944,1.88227302828696,1.76273001002634,1.97802458169267,1.93822238873081,2.01404020925502,1.74038691107675,1.87743582611675,1.92770121623969,1.79744406991337,2.22908197015612,1.75000516646253,2.00030805739614,1.92502240546814,1.92809758486749,1.90447040177056,1.82510624739084,2.0501369631771,2.00118480897121,1.60091864584946,1.67681567970994,1.94896836916961,2.20967373044281,1.70588988335777,2.02799152775399,1.87335496686712,1.99171134751623,2.07560356471372,1.85917614295412,1.61579950500693,2.05288143637788,1.90885322939838,2.16404045392017,1.83497558047054,1.84704190419507,1.94628471052544,2.18196024969875,1.93877955451871,1.96470289923891,1.95326363947961,1.82696442943265,1.86219430995537,1.91251380673339,1.89675642628588,1.87209364055519,1.89924543286919,1.90529026738123,1.87924186071038,1.84675600577639,1.82815299091391,2.02903100335234,2.03509463543709,1.95123613736725,1.90470050662967,1.91871887365412,2.03415699867878,2.00480536460785,1.83765722546741,1.92843583072579,2.17680274160325,1.86868962092142,2.05806517648944,1.91326298354833,2.24274083697951,2.19546736256662,2.24600427738609,2.24110181073144,1.70746683714536,1.78884610259118,2.06017929308929,1.83013920639774,1.94033192275106,2.07550467939406,1.92602246538379,2.163792537526,1.85770247969748,1.87358797276733,1.8617395734827,2.00209021102966,2.24947070060782,2.25411717565224,2.06805769411607,1.98223297711918,1.96858514566191,1.92890625216013,2.08783445640977,1.69259059237358,1.99092446190671,2.18435908602912,1.89486186587172,1.90067714595044,1.90287897205276,2.18439547538747,1.97155286245756,2.078439131444,1.97827914043826,2.14022812048967,2.18619754494892,1.95076150965259,1.86887096430523,1.86910696811121,2.17368120710048,1.70176822905298,2.18133539387341,2.18838118480027,2.08686995896519,1.73238721936864,2.08380032263566,2.0275581169439,1.84070601441058,2.04447369275095,1.90073672745384,2.08007922211747,1.96306657669631,1.83425509766079,2.09185320225637,2.09623708777901,1.86494248714261,2.0785005226217,1.77809818971387,1.78053525979036,2.03011126053134,2.05128617157643,2.01665361660769,1.76621725815144,2.22377961773511,2.23895137165675,2.24064910888259,2.33446620931042,2.0172669255083,1.9753162557979,1.96924115926675,2.02684777968076,1.79114814786049,1.83816666232476,1.86397007839281,2.24179454199278,1.8785929816677,1.98260407496531,1.99575129972294,1.96966663171718,2.16560360828925,1.87658110761345,1.83782134829912,2.02373488331686,2.08808021475873,2.1087809651907,1.87680730073508,1.8067783804328,1.81370911143753,1.61190563786004,1.83952693431669,1.62317268168596,1.91953589226875,1.93735733507369,1.69108210115675,1.79413441643324,1.92009904451738,2.01795650858517,1.96313078915195,2.02401571363733,2.02133855777265,2.24980376144483,2.12026861740448,2.03441151607414,2.03991268055973,2.11014503238921,2.16520695482958,2.07779156788755,1.86148510475091,1.9813995900362,2.21675419811649,1.90778647857311,1.99109602289537,2.00556884377189,2.02392589736872,2.01241158529116,1.74696901265492,2.04665398400819,1.8150372452338,1.89319911143205,2.02313147415159,2.01618615662871,1.76920371801782,1.78237396242102,1.67550852198603,1.69450232820366,1.84031094008951,1.52850516906045,1.77230617290778,1.76842810376519,2.01847525539198,1.77858363478106,1.99333909104993,1.87387901010099,2.04052571469835,2.23587612655576,1.88625616609768,2.03593818392727,1.70271723284893,1.86660591487347,2.10064428719158,1.87993814065624,1.85623101790777,1.89920299490881,1.74929987148703,1.77423458508178,1.90296421888168,1.85682647846411,1.86058843582568,2.01728174342074,2.02756028547312,1.87421498281583,2.03903935097016,1.83141770674787,1.83221190378986,2.05680062684674,2.00899531159687,1.82417356946035,1.89572853232605,2.07540020617524,1.85832401187004,1.93131868551684,2.24993754780367,1.86096352490743,2.11774848460678,2.10557811073367,1.87214491410367,1.82001203332915,2.32427057123173,1.99289216118518,1.72631966616132,1.89689456927363,1.89807176174726,1.80519671671004,1.89596496258457,1.86168077781212,1.7225424513912,1.87402325839331,1.99115883554751,1.93271993441093,1.98713949081409,1.99790871547239,2.07252624068038,1.8705538121967,1.90363182355005,2.027999007047,1.96048804238426,2.12337028085969,1.93344404568656,1.89857145792175,1.90402161359367,2.08885522071081,2.01009284116808,2.12658964832094,2.05680844301494,2.04890769936235,1.88656280460754,2.11690679313176,1.80035427043678,1.67882026863033,2.22082770831996,1.98595131768419,2.02216131011145,2.04075418772242,1.89498014373668,1.89082941683691,1.98927144234457,2.06481244532911,1.92932627948661,1.95213238453128,1.91639805819176,1.76180538032939,1.84950289356281,1.76805470701433,2.04307019666224,1.75379762346056,1.85001097383262,1.88557144331249,2.1002110069354,1.74259835382166,1.97233659631199,1.7883665718496,2.24513189720723,1.89722112733541,2.11473189548215,1.76847318497979,1.91902106311004,2.09773386207346,1.85196472654681,1.93336002533294,1.92562866043971,1.8359317241161,1.90420820480498,1.80600620491022,1.78893838815361,1.80095663823183,1.79226081227425,1.99038560736182,2.12392542314894,2.12502923715087,1.78008156661577,2.14006786478756,1.79150208424367,1.98398004315191,1.89569170001048,2.19597258061775,2.21748813813597,1.73989928781227,1.97076263724776,1.80635865863158,2.24475086598081,2.07158734634411,1.82014551087395,1.55655682788351,1.78978838349397,1.95888752126063,2.07312704679466,1.95668840517015,2.06677792977178,2.09117660720674,1.81167653866815,2.24001173924551,2.1177288363345,2.07150373645794,2.12149715106031,2.05169555314159,2.05208941341158,1.80788592421163,1.93810594245169,2.10431784310202,2.43480908256329,1.80021630559847,2.11226040032727,2.00373816891724,2.18420066653473,1.99359892071587,1.72131888226013,1.91831399855882,2.02824151764033,1.59650414080034,2.0684122382929,1.87733171341308,1.75745922726009,2.07433860252225,1.79519436040746,2.08191804871563,1.80135335499707,1.86299356088022,1.84568312074932,1.80907777215914,1.90565931336502,1.85934863575651,1.78219179787157,1.74871384719549,2.19466871744239,1.79385570062445,1.60533125467362,2.24168336649402,2.25283679903369,1.96013529236336,2.01219016120029,1.80723604654922,1.9271315550873,1.91805412011799,2.13240679259294,1.80501306157903,1.79921130948265,1.86385046024657,1.68905653073109,1.91765188647703,1.92387705671877,2.03335936196801,2.1952652938388,1.91884686047208,2.07081057003119,2.21519610572084,1.99316620959973,2.17986562797203,1.79816883121733,1.77561782886382,2.18370145314824,2.04556637120983,2.24868740353689,2.06571458988921,1.64347960224648,1.925085109192,1.8679707645174,2.03790341348107,1.99344783777426,2.13322065362899,2.03530193313467,2.07287960573182,1.91245208088714,2.04313382160541,1.83046118480032,2.10661470875354,2.17828768843298,2.31712474655747,2.12932826202841,1.9873853390815,1.55748429032517,2.00856716185343,2.1101817514558,2.12084122376834,1.56093821519273,1.60221668677274,1.53894443421745,1.59231357704089],"AP.gegvs":[2.04351904971394,1.82765303357934,1.8547124904784,2.05140406706632,1.81829151121657,2.17114403607602,1.78477038245606,1.85789859202252,1.93753079983026,1.77192135178768,1.89781488966858,1.99050912052839,1.81601171037218,1.98698603838765,2.19885603680941,2.13569496774708,1.87791445733159,1.95118440673645,1.85329129184625,1.89557643400041,2.0506543434528,1.78943569637857,1.78881806124058,1.9590762242492,2.11038966102282,1.9220417033557,1.93134105272419,1.82520409800855,2.09445791833988,2.2342845920959,1.85224385942589,1.92657535616144,1.98071204133111,1.89284067157482,2.2206685785154,2.02174747121582,2.04035931313758,2.03171700735934,1.82174142071923,1.78635255648453,1.68072439052403,1.70853637182768,2.24109355758282,1.98046487366445,1.76064177570129,2.11783723766266,1.79334877509502,1.91770373528346,2.10770614203734,1.99155573866419,1.88397329591317,2.03482275809115,1.98609433274769,2.03293772810486,1.99328491002275,1.8333373289798,1.92084625998702,2.28000314417563,1.96442598162284,2.25242657859062,1.80109410185482,1.97424035127193,1.86911376122293,2.30649728959818,2.00215606280327,1.86554219715733,1.98114416691513,1.8800902721057,2.06614893900235,2.16247140977029,1.82765495917049,1.92669487788652,1.99513256189076,1.99430818791788,1.83336991082604,2.13634908258544,1.93889070573242,2.00492344865701,1.99442766937629,1.93754508630665,1.94947163481363,1.71568189666534,2.28454292901624,2.04129805355332,2.29643078729309,2.22098418710939,1.83180765160108,1.91079874537943,1.88394137347645,1.84862634893449,1.85465522709084,2.2986218197444,2.22161683192287,1.85502460802938,2.25202716426128,1.76133388600537,2.09728379207341,1.79143724816493,2.23930143761578,1.77429957295665,1.92278698008836,2.30649148474745,1.92463003344211,1.87348291732187,1.67542185177508,1.70557017731463,2.00567193370379,1.84856514266228,1.66837743382686,1.98478290195486,2.28927387628148,2.03604002490103,1.98861656204583,2.04673284516124,2.09566940168723,2.05139622383232,1.90387470528512,1.84711030672978,1.85149394973826,1.85226455539756,1.69573814442977,1.77788092765682,2.02956114133276,2.00618053972483,1.89957054455053,1.76234697013324,1.96792785235269,2.27173614517584,1.96593208975057,2.21334526316066,1.72617000654055,2.30722113124882,1.9870810745839,1.6700325853353,2.06843790374547,2.01255690812863,2.0035461579312,2.04891115753076,1.6803638313242,1.82769701393622,2.00868844673533,1.98062111249049,1.84746121262242,1.92735545852112,2.04667945273385,2.25605983136554,1.99368693892269,1.81676670490769,2.28044131733143,1.976426247063,1.88206665031449,2.00172277237473,1.7279054953927,2.3029453946535,2.01766981280624,2.01934022887457,2.03725387965765,2.03462425109467,1.95685073522182,1.84088608306207,1.86129451919015,1.7363312997669,1.9993784421326,1.9953995220573,1.84980548509204,2.08565557389789,1.64376812179329,1.77408261130848,2.08343772546346,2.3065344420494,2.01987010334311,1.84652893169155,2.02402265508531,1.9280386226829,1.86213286296376,1.68808889528105,1.73775894321377,2.15238507646473,1.7654727461936,1.99086468493478,1.73775390216617,2.02084359783435,2.01476756790127,2.06532280504528,1.8449622564911,2.10712473704484,2.03936728103622,1.81370131183601,1.92722627843239,1.90085545335034,1.6779793265917,1.68311701475706,1.7777573907356,1.97161513515969,2.16304795987539,2.17675575302193,2.1001521489983,1.85910161207664,1.73502648121122,2.00181687092982,1.93638453017618,2.02964635824818,1.72889206647179,1.87278547520028,1.91426130835357,1.76911015285289,2.25271283333732,1.72324604721726,2.01450440885373,1.89895984695635,1.89944256540043,1.88771741127033,1.81117532307067,2.08499223769063,2.00662128749292,1.55242234905909,1.64129788742159,1.92579121356342,2.23100293615731,1.69161620937766,2.02825977622472,1.84866630227588,1.98468416877802,2.07286505204989,1.84696442808527,1.55574578308564,2.0500412551214,1.90546353047086,2.18515985665136,1.80365767365308,1.83530664649999,1.94308033553891,2.20364434123207,1.9365296277893,1.96878427736134,1.94665979857295,1.80168068173264,1.83751394534385,1.90386909591044,1.89533085646266,1.8517940229581,1.89310710793564,1.91035654825671,1.87036959360384,1.84367800991935,1.80728136170826,2.02320187764322,2.03247351131501,1.93632266344716,1.91293030085731,1.92679151281727,2.0514570146839,2.01568890782751,1.82467875289082,1.92635420118481,2.19199374367967,1.84897470673186,2.06940897721712,1.91897725332516,2.27074478358779,2.2199213313741,2.27525090404716,2.26807201818357,1.67777081676656,1.75601861014087,2.08716650310481,1.82702573650103,1.94057246131453,2.07104000091921,1.9070542696221,2.17882909794973,1.85104418047777,1.86715468934496,1.84477901005197,1.99908408968487,2.27824288573692,2.28337920687213,2.07975959685447,1.98817388948104,1.97384635539768,1.92559843129183,2.11237917504342,1.68174474311432,2.00269192083919,2.19116743730374,1.89525998838526,1.90148892498475,1.89749825920682,2.21400972485671,1.97490529131969,2.09411011126359,1.98133342410982,2.14630930633579,2.19354658417117,1.94710242517315,1.86341796154248,1.86146156831058,2.17863276379918,1.66851131220588,2.18516160776646,2.19513082811509,2.09345151096225,1.70264891043932,2.10490427755139,2.03968249680943,1.82839873443404,2.06060612817474,1.89605288787781,2.10220100132751,1.96550964841561,1.82353519704873,2.10448563551403,2.10957063868965,1.85074668849455,2.10065020845862,1.75752290416887,1.76262644471933,2.0257523957695,2.08419230926959,2.01065097297723,1.73933211212276,2.25486401642499,2.27241695983143,2.26692519694285,2.38695661516052,2.03012793416247,1.99107384773289,1.98599190976461,2.03242049246717,1.77061010666505,1.85459828200741,1.86421443859786,2.26992957174788,1.87017539658125,1.98592726179166,1.98255037813473,1.97876866972953,2.19168691456407,1.86579855827459,1.83099389387281,2.03579432116039,2.0930403203336,2.10313087545879,1.87548458051196,1.81238961555623,1.79792122224142,1.56682918401574,1.83477443775086,1.57966096943064,1.8915773674193,1.92499162582471,1.67966899836591,1.7599634854327,1.91239495420947,2.02350654687141,1.96648585135103,2.01780082483391,2.03212941838022,2.27889193960584,2.11678062110118,2.04137797614447,2.04903294597486,2.10520983912493,2.17923819314226,2.08843826565393,1.85494692651499,1.98342813448594,2.23536478555934,1.90422447485767,1.97703204459315,2.03104872589042,2.00911504171644,1.99842669025108,1.71981768071475,2.05589296680582,1.79838916002945,1.89628879618261,2.02967042141025,2.01489212980505,1.77177868484302,1.78707300042273,1.65115533132749,1.67343843890367,1.83030745200966,1.47796398825061,1.74057873960705,1.73784930297335,2.02332850681529,1.74943462485839,1.99879125712333,1.82644834358936,2.03707569387954,2.26030038335988,1.8832978278106,2.04441559574815,1.68012463595113,1.86255724725275,2.09452551829823,1.87525976173948,1.85309251250565,1.90593597959232,1.72275117760649,1.74389127345521,1.90820404614349,1.87222105836504,1.87943559160335,2.01192297136908,2.0324230419163,1.86489041209248,2.04543454284188,1.80803018094484,1.83394379888913,2.05371210563257,2.0214815717139,1.79267325300214,1.89336230001232,2.10182741578269,1.84406899395972,1.91769409786048,2.28919927077345,1.84999993975744,2.11336749971522,2.10265156484983,1.86723548550343,1.81158468110536,2.38010512176115,1.98536956284489,1.71113070105428,1.90168671456553,1.87675051645127,1.78838573015227,1.90181194638128,1.85696224403404,1.70987054932329,1.86964190476068,2.00176022750583,1.93338858095588,1.99137158556826,2.00604001166316,2.07922055415893,1.87204608532877,1.90825502034878,2.0232407756888,1.96668509840057,2.15842334880264,1.93223249031205,1.90310675770893,1.88694932082988,2.07799702326447,2.02211397902841,2.12401535270534,2.07148436126584,2.06148335574871,1.87463159222958,2.11216446609932,1.78570175330826,1.65631028076307,2.25234674099403,1.9848812096787,2.026253470763,2.04843956470142,1.89964828411208,1.89773908870389,2.01084379761189,2.09002131333386,1.92658662310139,1.95166571800758,1.92069609276018,1.74480442685248,1.83598943310449,1.74291321714327,2.07579041114489,1.72796182228804,1.83346275423693,1.87734907777951,2.12818452716861,1.70526901642254,1.98905329534722,1.76954540420898,2.27197410243017,1.8923837955088,2.15030144839862,1.73571739699563,1.92860735354893,2.09377272679699,1.84616060173531,1.92095281115398,1.92048819449794,1.82271608571095,1.90979102437802,1.78768725655067,1.75466596615539,1.78349332919149,1.75935581869642,1.99755038620908,2.15821738848524,2.1595486077566,1.75844460446677,2.17611687071623,1.77071871266644,1.99226330100879,1.90604419397185,2.24717822409317,2.25784127968913,1.71168413236039,1.97150432834305,1.78819446754279,2.29865361788286,2.10868356591792,1.80294104961964,1.50666206996561,1.77988593339969,1.95881581279552,2.08652831476858,1.95907867150136,2.07909767971737,2.10593441466013,1.7938712064921,2.29483427498723,2.14224119790334,2.08338721926471,2.11686573363809,2.08624052408716,2.08601024493526,1.78935467973077,1.94112198082177,2.12808359670517,2.50153647067989,1.79484054915861,2.14119769360283,1.99674587350674,2.1914833956417,2.00230840687699,1.71292285282215,1.92598200261733,2.05100649594703,1.53060590871871,2.08290204833496,1.85702369293345,1.74438435137441,2.07124409186274,1.76199153440773,2.10571586733686,1.79071435992186,1.84024052791865,1.83515671771564,1.78757293502621,1.91078305952448,1.85083932569088,1.74880673482221,1.72913420164958,2.20330827489575,1.78414164974277,1.54359405014299,2.28648018327885,2.29840961667327,1.96608421322388,2.03179901426295,1.79087530250184,1.93772130665552,1.92534649124544,2.15770822935636,1.78461297608943,1.76751222578786,1.85339380668439,1.67756897978034,1.9238739491572,1.93098571235792,2.03875370559024,2.22057275022944,1.92725948268732,2.07879475746294,2.23482683967307,1.98481936716239,2.18491300335557,1.78015571636127,1.75103301581865,2.20985482813442,2.05507603381785,2.27688981644168,2.08869366212291,1.61243530258822,1.91391064307196,1.85806207031485,2.05317455582747,1.98553828365259,2.16555881819246,2.05089935112987,2.10972824191279,1.89798260752959,2.05781333233708,1.82095505481859,2.13271121376189,2.21231358997908,2.36177911694553,2.16193581279289,1.97621969172832,1.51923784189883,2.02830567692496,2.14330506031311,2.14536495513499,1.52160469570226,1.55086916846911,1.49656937920799,1.54612188935324],"DMC.gebvs":[35.7143366681987,34.8406710710622,32.8513168940152,34.1484348011906,32.8725989024688,35.3566176562969,33.7273585827279,34.6621669878785,33.7048348261782,34.0656190261626,31.9307162146713,35.8201611771753,34.2963769459933,34.4171063318507,34.7203806784075,34.9861547375305,34.2896935121939,33.7143514823157,32.20169877379,34.4270422867679,35.4233758218574,30.73436121369,32.7069898783799,30.4216581800915,35.1832936939082,35.6467597823954,35.5979891659575,34.9041122299803,35.3351609883031,33.5904456652529,32.7952362388411,33.5258277244382,34.0084321240542,35.1095979789023,33.4499916113183,35.6846946018401,33.8112244897258,34.9827402673736,35.968992962368,30.7344249316321,33.6619636996174,33.3232901848526,33.5740210440523,30.5549138992894,33.591301126739,34.8593930996304,32.7830423493712,35.5608631839153,31.648876448672,33.9775126944119,33.7724855376014,34.0511073777142,33.9253859591696,34.0192866199084,33.9985440920201,33.6655654043741,34.754742056438,36.2634665411582,34.851352832598,33.603038096437,33.9649439803955,34.0202014629364,34.6969623470028,33.6917791477119,34.5750896378513,34.6398988566316,33.7819372386105,32.8428532817662,33.8002547763374,35.3943599640403,33.7808008041265,32.0622829050506,32.8914756565924,32.8742720510861,31.9212748731383,33.2167467857577,31.9427651111367,34.1181901773183,33.9886041220558,33.9472496531106,34.582439420156,33.9402865765364,33.6699670674487,34.4026554595628,33.6887489129637,34.0095971214461,33.7382882599823,34.2258174671171,34.9344598199345,34.0830142517596,33.8647760532346,33.6325731043231,35.040110815623,34.0136868558538,34.3864676323573,32.8089632162337,34.8689391390994,33.2172829708374,34.316851797868,30.6558449972703,31.8686391521052,33.662617316387,31.9179136547265,34.3217143376027,33.7233543922247,33.253115396233,32.7809069652618,32.8192438961433,33.5523777357346,35.4575255392506,33.6632672885544,35.7735138492257,32.5922057802071,33.9281771286415,32.3765228725898,35.1100331548838,31.734755671629,33.993671318428,32.8569201119976,30.73635492163,32.2402625457941,34.3666176414622,35.6577574936351,33.2973275725764,34.3976681812996,34.170725339439,33.5718262197028,33.6372248985044,35.1865432239724,34.9176066467695,35.0271197338102,33.6828977900924,32.7394584725473,33.595532220859,34.4946582058534,32.7336441524545,32.7305667977167,34.3812941560541,31.5618822176883,35.4388930568911,35.6421622666638,35.436896646355,32.9433849075804,33.6351825434653,34.3732711850893,36.1080286633618,34.1630507174535,34.1147603135797,36.1453496100083,34.0401450061066,34.3430611599907,33.9952563213273,33.4440542608282,33.6274174929022,31.8803522969347,33.9519649454963,34.0985842501893,34.0676851031553,33.8842785281644,32.0719583090332,32.829443135569,32.8392025562822,34.9298783944201,34.8993623962015,34.2666772822857,35.2670907656684,33.645630427557,34.2146200821753,33.7155746959802,34.3770136759245,32.800988661967,32.0919635960424,34.2153470887675,34.9918931408506,32.841046206158,32.166585091661,32.1018086989464,32.6776615130619,33.8566852452085,34.7014519965137,31.8013619356152,33.1112674967587,32.9093898910907,34.4675577865306,32.073197102064,35.3433669142442,34.2220435264954,32.8627298506409,34.8536909469819,32.5798655984513,34.6070616144242,34.7505401797998,32.5488088157055,35.1453585880039,34.3637122740026,34.2888169341362,35.3425283331151,34.025832529376,34.1278884912672,33.0177898260543,33.48168662418,34.7793955975039,32.2696424049141,32.8372832365486,34.7201936973786,35.272986450862,36.1777280951658,34.0246277199522,32.6826326482466,35.7998573000951,35.7645706505478,34.2220440697368,34.5168813973732,31.6451520746464,33.117194760142,34.096026480886,35.9507078748282,35.8319058054912,36.166345987598,31.4713363961417,35.3922791964153,35.3884633435645,36.2098814419624,36.2600846759183,35.3157848687426,34.9322789544204,35.7721300775663,35.518283064545,35.1170765398235,33.6173478287389,33.9785295442188,31.2761533307047,33.9732425196359,31.3586020673235,33.9219742535588,32.9867955588469,33.290973543293,34.0438023935954,29.3920441345909,31.4839866704191,35.2195944659924,36.4658525130373,33.4833701312531,36.4117135329171,33.445044004582,35.5285730070325,35.736045273812,35.7100222890737,31.8615413252611,33.4911309532295,33.5261260980472,34.756388499688,34.6918531302353,35.2573930531577,34.53344113252,34.3824046907633,34.2789685690099,34.3820362013008,33.4957822674421,36.2192147255287,35.1056799940638,36.2651619485623,36.2249688968319,34.7399025577352,34.0848973140726,32.3404719263086,33.7966413107024,34.5471542534244,36.2335900829487,35.5489577013227,34.947311455041,34.9709867789423,35.0112868830047,32.3212927012954,32.3770303157498,36.1984532776218,36.177169616942,33.9479368717096,30.5246749201113,30.5766652312907,33.3951260534062,34.7916293186671,32.6189008934419,33.2485057029611,33.3876586003849,31.4300613125695,31.520872474656,31.8840689999902,33.7855637232373,30.5010681229331,33.7537610204877,32.9489541977716,34.035551879192,33.410695371758,33.16225904075,34.6960970492679,34.650062194801,33.4096806738815,34.2748935414895,33.3435595828901,33.3856233347191,33.2089411648184,34.6966832180988,34.7488249307929,35.1225924594168,32.1792259810712,33.2925261415769,35.4383127741954,34.7317685001698,32.1605199280973,31.6749504439373,33.56301299834,33.5468394930557,33.9121406984513,34.6858460526312,34.1956402377159,32.577927127519,33.2292521331021,31.7823282625422,33.2249842091961,31.3828160552998,34.9556925289193,34.8593713978134,36.1938115294176,35.4369493664042,34.7570103703852,34.4778206956817,34.365878183048,33.824334553039,34.1876357215212,32.5970820580622,32.8503684201008,36.2110960790631,34.3803604457165,35.737445928694,35.2219342833927,33.8928743655083,33.0591131452536,34.8310694489394,32.6754823978454,35.0455398934239,34.0115448234304,35.3505304861265,34.4407834024971,31.8668380737041,33.2199295502875,32.6246448697833,33.7835044742138,32.6957127501122,35.7511223156191,34.8068611219754,32.5596830406209,34.1863909699395,29.3729512965505,33.4614829306971,30.4859231944412,34.0873005173956,35.1181361631431,36.2760389280256,35.3376001514969,33.8409245537281,33.8378214252013,35.3736799673548,33.9450527797972,35.3793383477083,33.2967702378804,35.8091371703268,34.3500770610679,32.7920113136264,33.4077205272105,33.1313062270847,35.4938206504538,35.4276396259335,34.0763033034665,33.5063814254133,30.695190552487,33.4780289444506,35.3312539871981,35.4518524929834,34.5629048493342,34.4606699819773,31.3101428008535,32.7151448653219,32.0922265408055,31.6241232117403,34.0657805727043,34.0125842799922,35.4176323799963,34.0117814988063,33.8908158533272,33.5548033785941,32.6998190038717,36.2250125169265,31.5777244376197,34.049135421801,32.6122549060947,32.8810357632611,35.3555487717536,34.987610561702,33.590316378398,34.3730038167425,34.1549067549893,34.0577984727514,33.5189705033252,33.0730721635129,33.1671795424348,34.5124230558667,35.3389898102365,32.829777771816,35.2547726230736,32.3210121431361,33.8486235557413,35.9325113451274,33.4682936155636,34.4113587383503,35.4700650184948,35.1124915349169,32.8880019901469,33.5611125532281,33.9935682539163,33.8750927758496,35.4660843714959,35.3527194875588,32.9505314562685,35.5991562248883,35.3892003281869,34.8158178233697,34.0303106813362,33.698475127795,34.8643880042557,30.764826323034,33.6349486834144,32.9714073931904,32.0909722328379,32.9006714374201,33.8727764361896,33.9357566529274,34.1669254412198,33.8569005850435,36.3163589450017,32.7927352183373,33.6077011277513,34.5509293609371,34.1454143113688,35.3723490389012,33.9888359871132,33.5923208925071,33.6786172834542,35.2836724695792,33.8709538993446,35.4466145459638,34.7634698893793,34.7386114634237,33.6778953111578,35.4318773592253,34.4569797775578,31.3619647036483,34.8869853673555,33.6006278101577,33.9975970362917,34.0230239292261,33.5107434261058,33.5115440085014,33.2185373783173,35.2263721862547,35.1733276113688,35.2061434357748,35.1378701329921,35.0257432536354,32.8848814812517,35.0862789621773,31.6163293119273,34.0484932466975,34.6614961192827,34.392315439048,35.4387623733907,33.8814305560025,34.4523143799829,35.3699845193908,36.3066824821237,33.9205170752589,35.4296693585396,33.182142093147,34.5504025514432,35.3138669538506,33.0092599951812,34.8394875413492,32.4685180258991,35.4633084449442,33.5419083936392,30.6367152668799,34.1721780785957,30.7196283148992,34.1910935454272,33.8680946242036,35.3937556892009,35.3973974764089,33.8263321710974,35.4405719267487,30.6865453936416,33.7546903147097,33.556967987682,34.2158626417005,34.1332631651338,34.0002044233916,34.6233305954044,30.6249405374539,33.7110026871954,31.6560658985252,35.8829397374713,32.2175659108083,32.8927896443813,33.6743501153525,31.9611278605829,32.8171033559627,31.9836716008993,32.0332533759928,30.7799931275303,33.5750430692555,33.7108638958254,32.674736531325,35.4375293296349,31.6957149939168,31.5965568402523,30.7998518768936,35.1782614421909,33.7389723499077,33.6881694157901,33.8349123172576,34.0597780315868,35.0295368431087,35.5433006580198,35.4334930944612,35.3813980138072,34.6797334523788,35.0994407360104,35.0637570723389,35.3755944902946,36.343592103985,34.5959268483099,35.3111254986176,34.1737972460082,35.3525253695928,35.495732864519,35.3780558770193,32.2193212863834,35.3720409014377,33.602199799078,32.9331001712367,35.4933080893773,35.0853603764722,35.5699260939165,35.5164294837671,35.0161866804983,35.4286594916458,35.4503958165861,33.7822566556212,33.8697259670298,30.7112289551926,36.1505147307958,33.5831335265552,33.1729555648257,30.7584300634916,34.2270074925237,33.9024609791962,32.6560876034928,33.4520005325287,33.5361234418226,31.3604774239035,31.2535522059596,33.5042426139603,31.9022473738024,33.5590034068419,32.5126528669986,33.4192087026451,34.2432545893111,34.1128415318652,34.8069146369306,34.1056618469932,34.9446107998188,35.3786977231914,35.986832410614,34.2434702243029,35.3802983510973,35.3657829101162,35.7880157265898,35.6060858341943,35.3025783567225,31.7165037990398,34.3910071918562,35.1963162274281,30.4112759252866,34.0303494111418,36.0566450837978,34.6679328131782,35.5734479044082,35.7310194155943,33.6704145775833,35.2188438225077,35.6052906546361,33.3586543060109,31.8372951827031,33.5519772257285,33.5721508340023,28.8267656978668],"DMC.gegvs":[36.0004258238155,34.9185018042256,32.659038434336,34.3608766357639,33.2535022608056,36.1563669051713,33.414515573771,35.0004406075309,33.6452922101124,34.0252706005648,31.6570467743205,36.1172233088862,34.7649581770903,34.2127004862994,34.8589329508857,35.1009663797515,34.2010679719086,33.5717531854301,31.7401604353825,34.3247543578154,35.538727219231,29.9178094605937,32.0882203669562,29.6037963894112,35.6834066861968,35.8229775517343,35.8072148881684,34.9765256880703,35.8724096951888,33.6712428457827,32.5925931780928,33.3628621891447,34.0854681868965,35.2541672607506,33.4696500609696,35.7435609377255,33.7086308694771,35.4718476156249,36.1194166064144,29.9168846912867,34.0602874996985,32.7556981221728,33.6246460902254,29.7531880034456,33.0542881404879,35.0572974556523,32.159456632892,36.0500511291284,31.4505441259487,34.240440709579,33.6671353165913,34.385610980661,34.1559210901754,34.3490547416178,34.0527798506703,33.4828327188138,35.4254132456174,36.5241030025101,35.1832646321716,33.6992993434791,34.1945261540073,34.2283916450378,34.9456722172272,33.5660038429112,34.481556895586,34.9814701253295,33.8232795389312,32.5111211801187,33.9673869597631,36.1864026716946,33.7094669962988,31.5361311314048,33.0224712270806,32.9825453811473,31.7841064514466,33.144121979513,31.2519423731237,34.2237700414483,34.0432458819797,34.1172586024456,34.5643921770192,33.9376602050407,33.5279657532678,34.1402113888837,33.5236205517553,34.1902781603788,33.5793671788059,34.2941920028142,34.9611325822396,34.2966581276448,33.9200305980745,33.5073157483842,35.3461681738715,34.1816620248946,34.4840040922762,32.7209294830982,35.101018690466,33.4208135008225,34.3903313546088,29.8291621015142,31.1591778312643,33.5475422272985,31.2039250927978,34.4306693632899,33.8039296885827,33.1315994286357,32.5197193422587,32.4636604443923,33.8802872469796,35.9000894012306,33.5426413150054,35.8316578883214,32.300896310875,33.460259605123,32.2979799093988,35.367267157294,31.3811120717519,34.2077184276621,32.5116953866957,29.967045523071,31.8744548460756,34.6071058200924,35.9163419323635,32.9602531230769,34.6276612190501,34.2399693644465,33.8757327419794,33.4913108556579,35.4597928805602,35.1943120843043,34.8223721893613,33.5526169844143,32.8313276794969,33.958694189548,34.7731924233754,32.7905050516682,32.8373379645289,34.1444676990808,31.4119866052556,35.3795661110465,35.9828388067436,35.902579120541,32.6835797425594,33.7229591030276,34.3125488542976,36.3127095808703,34.1915176637544,33.8903061855185,36.3951661380566,34.0573175849739,34.7551553389761,33.9909683601016,33.1416934659974,33.4845502277366,31.6954970845691,34.27011283425,34.4489564748644,34.4208427237688,33.7562077432115,31.7003253458986,32.5960593218028,32.5497505828402,34.9021303362812,34.8318251820445,34.263071377947,35.9375311296075,33.2224812755612,34.2194019192357,33.6790311541187,34.6446610138714,32.8821853448304,31.7781653137278,33.9872010764319,34.9260745984466,32.6495526394128,31.6754124033227,31.5749182922172,32.486503642285,33.8241905069762,34.8150418910928,31.3986761180006,32.8560018787575,32.561518744661,34.4076724888039,31.7950880792618,35.890641641243,34.3684037004891,33.2420907250525,35.2918346426047,32.301653017028,34.6280847594456,34.7286376876236,32.7541587574911,35.1409012311327,34.5832173003886,34.5082866849347,35.8344616775269,34.1980853730343,33.9602726857906,33.0002562906353,33.5520320339968,34.8309117511607,31.8915074100192,32.6632450476226,35.3695387920799,35.3884584734876,36.3585659273169,33.8724433877179,32.7533706226589,35.7990538176587,35.7668310234595,33.9558884616126,34.6265619979473,31.436599529506,32.9105181384834,33.9058714529877,36.1054513194625,35.8542420547627,36.4025925128669,31.0324456680009,35.4203314062818,35.1180289520464,36.5149572285779,36.6238629078801,35.9949167716928,35.0497507306041,35.8312514378891,35.7589378461345,35.4454707774353,33.6339099388858,34.4248061260652,30.6745439877676,34.1141833505854,30.7968860633103,34.1303938350993,32.7027757799678,32.6397108854421,34.2371328389566,28.2032948829725,30.9450944499284,34.9126280514027,36.825869635538,33.4905233176218,36.7706107111252,33.3317044215501,35.7831440551602,36.0761702450461,36.0764481529312,31.1715755764208,33.5240052435292,33.5564542009665,34.8319949066196,34.6998809213562,35.9618791491162,34.9859358148428,34.3742705837561,34.3112399790715,34.6218607417554,33.4816256527304,36.4703216074549,35.4375619160206,36.5455271341394,36.4533186665583,35.1577083365552,34.1654814471065,31.8640542373757,33.8791041118774,35.0028141227174,36.6154963631059,35.7241280668975,35.1344455981393,34.7362424500179,34.7641065401329,31.8990722091301,31.916726871588,36.4238737552684,36.4018450921397,33.6993489362039,29.7291187687169,29.7909584481714,33.2530799867732,34.9234141545638,32.3663789249238,33.4275699410356,33.1222602943446,30.8799481084251,31.0243355726619,31.5354745704156,33.5913688367802,29.6705670393062,33.8685180697365,32.6982475991772,34.1037052744194,33.1489724928485,32.9968060967432,34.4629037951017,34.3903793931302,33.1615296268779,34.510399861748,33.0706084048925,33.1322980694433,33.1004439959947,35.1003406700546,34.9980785350457,35.2665261714212,31.8970142098829,33.065271578004,35.6510623336202,34.9811877386975,31.687147920905,31.3179251078719,33.5605753079115,33.5628413737095,33.9637947548042,34.7472172665909,34.3353102660327,32.3608480575965,33.002815858203,31.5967670867741,32.994167372742,30.6504763029438,35.2001171853448,35.0887490494532,36.4195419344548,35.7449009999545,34.8095768698934,34.8868472593747,34.7615317977928,33.3399261321937,34.3725301992635,32.3868995753918,32.5166098826569,36.4534324457288,34.3133278582812,36.0091928072634,35.267390433804,34.2992626956839,32.8728827614263,35.1844932871431,32.4226810785865,35.4998897650605,34.0917919328475,35.8827273958607,34.9469865128925,31.7367552141247,33.0556598566406,32.3742480412343,33.8936831314667,32.4240080303245,35.7730994480348,35.4838386439508,32.3404734980759,34.2633125988659,28.1899086830442,33.5052127501846,29.6825130762867,34.2140066328041,35.5926469415368,36.5399431959924,35.8841530423558,33.3401455372007,33.3507563219939,35.9219789667873,33.7299442520229,35.7653687562135,33.4087122270594,36.0951442411499,34.4670097278812,32.5487271091824,33.1472779515316,33.6163491825423,35.7319253052621,35.6453434881232,33.9461484216881,33.6146737455541,29.8736102858127,33.7090669442001,35.4044383534079,36.374176806218,35.2556769721264,35.0951733597278,30.5633427448139,32.3694760232891,31.7381943415939,30.92214984048,34.0527752102621,33.9814792276525,35.4833435675095,34.003247197712,34.0245770896959,33.3319869514102,32.1796199561117,36.4517767013883,31.0656040459204,34.0200306530757,32.4619035015462,32.7215332577922,35.8979466469977,35.021239544616,33.8893306458425,34.8038009542452,34.0201078090175,34.0628934413186,33.5659983982623,32.7135585820388,32.8300443733596,34.4272333159405,35.3940358436956,32.5465191642722,35.2660025860698,31.9932564489437,34.4001762676875,36.044690212868,33.7057500751384,34.6521362266798,35.6922094697585,35.4884371034111,32.6072462354179,33.8135443827165,34.1880503977764,33.7483328107915,36.0125244231537,35.8801357044575,32.8028868971306,35.8265247009788,35.6693086168371,35.1709622655923,34.0471400015222,33.7528789816387,34.7507599734876,29.9768247821994,33.6644913743503,32.7934875290348,31.8293696860272,32.7189262776124,34.0523817954466,34.1453252579027,33.981906468753,34.0146807153259,36.6183951272151,32.4563656666129,33.6470663748257,34.4573218138299,34.3255427146985,36.1492446787106,34.1805528985179,33.6484342701713,33.8294387158173,35.7590252084058,34.0255169994504,36.0110593377305,35.0216006782442,35.0351326255858,33.4487484225817,36.0043909516477,34.389993971708,30.6416136744527,35.1073919215587,33.4743956681225,33.961460853035,33.9876930554438,33.5202025896509,33.5225633503216,32.8752758146177,35.6126586849281,35.1243016915187,35.2006829886528,35.1919341785704,34.9990577677191,32.7899003682705,35.2053662460009,31.3711378895027,33.8921999619999,34.6419555400471,34.3196964089553,35.8189706674555,33.9918380971879,34.8658456583953,35.6478039568625,36.5886454510164,33.8612483826256,36.2239113037303,32.9099523168953,34.7513081235497,35.7948379049999,32.7407958262389,35.4955879807222,32.3292066838651,35.4037595322592,33.5967490753912,29.8115201289917,34.2517781847845,29.9334537105296,34.2774846658047,34.0313368689411,36.1650459946234,36.1680019193222,33.5619751757984,36.2299134619735,29.8443831088324,33.8754831885224,33.6802071021019,34.6381496568929,34.4595085622156,33.8418288630137,34.6517803243126,29.7823160504238,33.5945719841638,31.4205846355511,35.9444684472318,31.6512785059565,32.534778145256,33.5583805198445,31.6061019395681,32.6910432940317,31.6129736369282,31.6751919249584,29.9760814199443,33.4019086222186,33.6329415559297,32.2528107265183,35.9533394496829,31.4687764258504,31.3672121064673,29.9987675102363,35.494447538275,33.6844576510421,33.4451030746346,34.4085931309431,34.4447471068788,34.9750387643922,35.6865211244561,35.4285722166912,35.4689926297991,34.8773262216872,35.8687133802173,35.2053337157937,35.4951239529684,36.5326932269257,34.5523371655211,35.2778789474441,34.2752135151829,35.5301497414289,35.683002311831,35.1303188623182,31.9146532333547,35.4041073617881,33.6181618004977,32.8782924874718,35.5193490785259,35.0713260819928,35.7094569830019,35.7228608743575,35.135589936906,35.683399644171,35.6903520411011,33.8592100016464,33.8220394118904,29.8769348862185,36.4497969465731,33.6063862882716,33.0829345387877,29.9447576419581,34.3160200001283,33.7769272371652,32.4057513512403,33.448342449898,33.5226981943153,30.6247224969384,30.5126622305129,33.4955330325584,31.2385826808838,33.5748620773966,32.0878644071544,33.1796365216888,34.3870207736398,33.9758932442038,34.9561629999924,34.0982858327243,35.0707702232551,35.4989151683147,36.0399064863484,34.2987087922474,35.6328965445022,35.604232641022,36.0996953817871,36.0034834046447,35.566665304333,31.499062483033,35.0947416949634,35.6986792309864,29.4481369951118,34.4106802613872,36.8995807369664,34.8195554784589,35.9910521507711,36.026491324201,33.6868203626644,35.7488287009716,36.4591010122909,33.289377941871,31.2780205271473,33.4770996303378,33.576246195521,26.8593835710999],"DRY.gebvs":[6.04404112214595,5.55882679414095,5.03347381925499,5.1797968818918,5.41611942990701,5.35436421889538,5.5866142496677,5.4306103826081,5.74755988569432,5.56137711682618,5.13560757821155,5.63744794482582,5.44031383211242,5.9828938480517,6.05842816457975,5.85961728278185,5.75441703755521,5.72331204576587,5.22539203798673,5.76575976871137,5.30800741077966,5.07320263332409,5.54697469962716,5.02588415768433,5.82425973439905,5.27436715869667,5.28347622735355,5.57006683690429,5.84338734023772,5.56851320889137,5.04408383587254,5.77726188377793,5.50506875133755,5.48021017761119,5.56395141561635,6.18284794670905,5.7173818148601,5.65996699256766,5.46405018144225,5.06606592853619,5.44001363409688,5.57763691281815,5.58523164315165,5.0491325911933,5.56494082359268,5.49933848867278,5.55537264206647,5.66066766668252,5.36272076222312,5.54062475800891,5.54072226532274,5.62603897546414,5.54314407302774,5.61393632116178,5.50394606260742,5.34739183267049,5.56044909703277,5.73290787790458,5.73628324996132,5.59175465985597,5.58034796882072,5.5181179593433,5.72607303686218,5.67410593431904,5.6591516535936,5.79907562828296,5.54089860985954,5.19792175572111,5.54464372803929,5.35335263760515,5.23493240430087,5.23035997703012,5.55214937587106,5.55190084988317,5.21586932761413,5.24991473210417,5.16970860181042,5.52478669429184,5.50614657353696,5.63018229600507,5.59536106441889,5.31313576626849,5.6554817197329,5.89154803458839,5.67341768186105,5.42147689374312,5.15178523163169,5.75949760179848,5.68581907036936,5.20892523827014,5.20235563208047,5.65568975367824,5.77513569252114,5.20312814273604,5.22083561239334,5.51215636028088,5.6506065240845,5.37905824028415,5.20901570225368,5.05929178208978,5.16095402476935,5.66680523154679,5.16655871444729,5.55477794780811,5.4210034636177,5.15765823407941,5.66174392593359,5.17765050711202,5.42990789857536,5.81499749599072,5.66089583541681,6.17945454871582,5.63589499403407,5.30616079413165,5.40499587410081,5.91272276175669,5.10271636978155,5.20793875481786,5.19007587295008,5.41429655011674,5.25791618968138,5.47123971012414,6.03507233325803,5.25895907434731,5.62840311394352,5.31635884557781,5.35925978867356,5.65310352251328,5.9398259295766,5.49462926840066,5.72560431497373,5.67101053842089,5.53633579648089,5.42744882075011,5.65169958400248,5.53914590131294,5.54936216087344,5.88790348916326,5.21887631457225,5.73527519996231,5.95542730130961,5.83067829952245,5.38444856315468,5.49266444372903,5.54511235382476,5.72525898956097,5.16224970780214,5.6442873921071,5.71942051913719,5.68059462964089,5.43807005329795,5.65072863502351,5.46493866430927,5.67442658226901,5.43323101520043,5.6047818958642,5.61008183445477,5.61485240663587,5.67495692616825,4.9935597531888,5.05793374768868,5.28786572074547,5.344380074257,5.34535017212093,5.61533450707552,5.440235141937,5.45566024230089,5.70069601671742,5.23203751590246,5.44425699490544,5.55677787829441,5.00491912751428,5.72181300893916,5.70440364666994,5.0515695220458,5.11577370192159,5.15141215806926,5.46110238771941,5.21267382449936,5.50355300641866,5.24054242522064,5.32405952038223,5.30784010099486,5.5657267562082,5.27967800064754,5.83512681588128,5.31651068177872,5.4140470032672,5.63379729289152,5.30888041553167,5.40364377309744,5.41942534799704,5.28552787812837,5.83825406069127,5.54470050790174,5.55472568725664,5.83831229341342,5.20376311566552,5.6745957597562,5.31890363592383,5.34247123603635,5.78160364225887,5.2712007848475,5.04370315879586,5.55703934087899,5.61351785128536,5.71846775751503,5.69009593197945,5.55092579014519,5.69857749267586,5.71028296269744,5.3658575035339,5.29076284055734,5.35852421283449,5.27143556988199,5.31276874301343,5.30636119245822,5.70260581624001,5.71369406739545,5.07916083442378,5.49334032239754,5.43381216344901,5.41070096322167,5.7915243167647,5.73152405188656,5.32263408273131,6.20211467788366,5.42938781775688,5.76875885891658,5.0762218220617,5.34445493184495,5.04305320742283,5.82222651849854,5.01954206169881,5.62296756791859,5.42005709767169,5.46044959184106,5.20032198338076,4.95297607705122,5.24760290305833,5.43869257243555,5.5248472880094,5.28412374293912,5.51514258499757,5.34634157843235,5.50707530694758,5.97667776401634,5.95879628404862,5.16170025029092,5.28651270419012,5.28640741691904,5.76991320993744,5.77449596243643,5.70426658075298,5.55855535906097,5.95374628518964,5.62659724896642,5.35219988373261,5.2877378232217,5.72633255911617,5.78027872454187,5.73129329288521,5.73690707789437,5.09128560361646,5.31629401651583,5.23539880005616,5.23103271550226,5.57590076841948,5.7898088539144,5.25848962624129,5.44341325398142,5.37914755332026,5.39764041181258,5.21890679795184,5.38744274398164,5.72377765946154,5.73403789290166,5.45614378492871,5.03729516430644,5.04165569085959,5.35767272960509,5.32219767659537,5.07460972744922,5.26050199511627,5.19770936018264,5.25071469754744,5.24948510205453,5.11898882479733,5.12406414077768,5.03874047794805,5.13448554352773,5.12362651238508,5.23980661129566,5.20113446876387,5.03698923855826,5.50204406054073,5.49808088828708,5.2101713736538,5.27514465412492,5.19321945823053,5.19144606906301,5.28848420801196,5.0882565763671,5.17202628277477,6.0239134339752,5.04560708802847,5.16137726096555,5.40846220747224,5.1652255771504,5.22370140465602,5.01598559797057,5.17230746376901,5.16307135934757,5.0788561844017,5.3168173643176,5.26868530281403,5.03403042593511,5.20974210524763,5.3637768757587,5.2044254290855,4.98389643845771,5.47769150431068,5.46254373352373,5.73136411500689,5.26832570701089,5.77326032719104,5.32639424703526,5.3224456754644,5.30136903142604,5.47497947435024,5.18819176110378,5.1913079200482,5.72694745678182,5.75878514208274,5.61423804044043,5.83502337457759,5.47434634397501,5.13471703670927,5.63332480541022,5.51150100386248,5.50177836425241,5.69249224435685,5.83028942317788,5.51109214662721,5.2138906915159,5.25109391453456,5.25363201750157,5.49376779739234,5.25197775504812,5.68788970901748,5.56817088889239,5.06612138090853,5.32142786230566,4.9533290531664,5.27549577708362,5.03720005871837,5.39811022315914,5.52212413857702,5.73863029469943,5.84359012446097,5.31036134567343,5.30342567927585,5.84647517649928,5.38565158320429,5.64651994167948,5.0950757867575,5.61641918062603,5.2135306061092,5.25452227470317,5.34585116136705,5.30689913440625,5.48539971528972,5.46480881051823,5.6895468120375,5.26665431128253,5.06419401777849,5.51830787347803,5.64473469191604,5.65384594382968,5.30002932738098,5.29084446437909,4.98946409050646,5.65872379254975,5.13183320231222,5.17563287599055,5.40947899604914,5.39942269714515,5.66305452472899,5.41156628809139,5.38174865762867,5.32997339610056,5.18798832353877,5.72147059217532,5.2644936050718,5.37890972479879,4.89483158594103,5.04600190731552,5.83614105872598,5.67743923718042,5.30629073155876,5.4427090675421,5.71004852736434,5.40332626196319,5.30620242515993,5.30512446360684,5.31088490927892,5.64925802039084,5.64161758892947,5.26535841320557,5.65239648351208,5.21442667510429,5.3597215340261,5.49323292095762,5.28618173014793,5.5209593458203,5.61206655892448,5.39272376563478,5.39580834008567,5.11448284130834,5.42765415411113,5.59816135306259,5.86026547143842,5.8504301934097,5.05475933884978,5.29181749865154,5.27061892282519,5.30141456236176,5.31712113556691,5.31467871107346,5.62329699218442,5.07412815346528,5.31549757503106,5.0717653203064,5.1762789475348,5.05380264496131,5.48376164712116,5.62714120372455,5.58900928307821,5.39149819692525,5.56916658431058,5.18843796888456,5.30440508539312,5.6548945054348,5.44608028398693,5.34945913242929,5.62345789003636,5.30216579770669,5.45455569019215,5.84027531288117,5.48750577964183,5.85424889150071,5.54309675109924,5.54203914972636,5.31326942365777,5.84244502635464,5.5316507621621,5.00022084043068,5.47046461588275,5.60561643166266,5.3754937413475,5.37444287408917,5.28471587392962,5.28397084359871,5.25502069236001,5.40307685604532,5.57753451069617,5.60472706758895,5.70772366614906,5.58591321486915,5.45779886548458,5.65321754615225,5.3567956236597,5.69455865698966,5.6409360725172,5.7505596483234,6.0811412699933,5.29799944903388,5.33059301431893,5.58171593917172,5.74087197424894,5.23396508629886,5.35046909146726,5.68341297214389,5.53835359869709,5.82713275492361,5.38892197088525,5.56898711131896,5.1960466808735,5.74773411433564,5.29700486748707,5.053037240225,5.32207420150093,5.06537546926359,5.32159994711225,5.46739800873782,5.33909036490808,5.35059314703529,5.27133353064731,5.36233195799453,5.05503207600342,5.46864377900996,5.3073282667187,5.40888114455044,5.47846580696355,5.67889869510881,5.60371548195987,5.06302727331131,5.66851189486744,5.36737922574843,5.6819142923436,5.37656198924584,5.38399949185677,5.29196979818262,5.02262747285772,5.14054390084178,5.01500758860282,5.01718729243323,5.06793308726045,5.6546245305321,5.1936357716989,5.1142725076392,5.86431725277236,5.37737827359574,5.36369529080721,5.08477515518064,5.58866707172379,5.17971537080839,5.91117489467336,5.54757718185101,5.87923470015923,5.33679861075169,5.45297729381192,5.4693889331144,5.4076859900413,5.56143288161269,5.36001504800891,5.34241398713504,5.43222706423619,5.43345731165031,5.30561880543432,5.5375407836917,5.32864625730504,5.44408409244127,5.55659917426497,5.44464753547213,5.14549117179273,5.55626094683464,5.30998501163911,5.47266906728449,5.41799395315431,5.59346639091788,5.45414554191451,5.55775735021883,5.33541972107438,5.44835751689666,5.44761342486415,5.51761905161041,5.73268596556651,5.06415375969015,5.45715978051941,5.30204408468226,5.24163132247417,5.07700858793789,5.33619059814586,5.59162367869222,5.07294358354199,5.29811668387925,5.30222009477842,5.17834649928509,5.49470527834343,5.30046356666976,5.3241994663126,5.31732907140642,5.06315407643467,5.21073233585751,5.27635046292266,5.71874909194155,6.08821852504533,5.39431206786651,5.96838554109172,5.69444537488689,5.40127961990706,5.76314329646332,5.62770585411085,6.0661486337261,5.93576926563007,6.10853057830341,6.05286369127268,5.37364110887312,5.59508257835381,5.52268320490751,5.17113254397089,5.88725774285564,6.09538113111702,6.08053882780789,6.09412808945812,5.93685708142567,5.49217367437609,5.68463232884959,5.68836940237857,5.26282566769238,5.24392521556676,5.377588863312,5.48220012920836,5.37389770762184],"DRY.gegvs":[8.58296780025131,5.21715198609546,3.18109663325976,4.77398770242141,5.85513313643842,6.2437132674279,5.08656536940444,5.13636481547367,5.90397694792581,5.66455871099534,4.61807490236687,5.80206539965643,5.62339491420812,6.61835169277913,8.15136477011776,6.51505987278826,7.19135835821922,5.87994682648002,4.33206510258152,7.18471261222667,4.51072385953436,3.8984494439539,4.94263608849586,3.91469088250209,6.27048423875875,4.33032823825743,4.3903573476132,5.23653930387518,6.34462421261464,6.0499492798658,3.28415906101469,6.28859852713268,5.86514789400271,5.27212290548083,6.00918152411843,8.65337806339691,6.45056822234674,7.08190605237577,4.7412550568199,3.98820716407995,5.49440214367333,5.14656698901128,5.99535188590635,3.9603739625716,4.63962185402453,5.67565058655785,4.88527553659241,6.40065275785917,5.86246879685785,6.5499158079816,5.11303303459071,6.33745556229477,6.44543641818908,6.23274416112306,5.88831559463283,4.03357753888244,5.84236929811849,6.73641935483595,6.63054648515986,6.18408937018389,5.63720494756368,5.55351735048679,7.55761024383996,7.49006978765223,5.42920437995205,7.15124776948047,6.52531616499632,4.50129873490242,6.56528922602064,6.1336412046648,3.86055938496833,4.89930487555826,5.81429809938446,5.7753545790262,4.90613935201142,4.59827000428047,3.97702720041803,6.02185538454387,5.78276780876421,6.53558312812328,5.47841770473719,4.58025095679924,7.39850308488657,6.14711949812498,7.42846676863992,5.34742965759514,4.13800841540762,7.18845636096856,5.8553553440208,4.33977689427102,4.28796756145499,7.453694406399,6.58337619079776,4.32558222159776,4.4290867742097,5.78337157431789,6.6362305745955,5.48599931087666,4.44725254104246,3.91042781402594,3.98491666079467,7.57233172148366,3.93471645219408,6.19608062076632,5.45706630878682,3.87600807497293,5.97240096907509,4.35065077654748,5.37948714292255,6.52292572959549,7.41610052818032,8.62627823737101,5.90791288305348,4.37031739970604,5.91603053990095,7.48358467851367,4.35882975224913,4.41447139308002,4.44377853809061,5.36611519812078,4.82739043799039,5.73711051356546,8.46857245697538,4.76961961295953,6.39572391908595,5.10822034378596,5.99758231534916,7.34799966499964,7.69306562886308,5.37215266395646,5.58770566605521,7.48305826644342,5.75676317853303,5.43960057095698,6.71748372001926,5.72938401259,5.80789773403288,6.14307853938141,4.29580312583029,5.93630523488951,7.62548979764238,6.58434810119175,4.36020915072047,5.87475523593808,5.28536093567508,6.66310674603529,3.733978937617,5.36519848541027,6.68699241058146,6.33110065286902,5.78043608104884,6.01968238590281,4.89348024571221,7.59100666694834,5.34699782704383,6.3149488409719,6.27044147043449,6.36261382929832,5.53301381218373,2.83395002813077,3.31210975024443,4.56981620460275,4.42606939196144,4.3626348928608,5.30444684376283,6.75709687125805,4.63735124097708,6.02630938079746,4.78480255311411,6.6191650030232,5.76966403594435,2.98054230334626,6.52803302758838,6.40610900834668,3.32548405773107,3.70901069580021,4.16842284996266,5.09535874788001,4.56695159779298,5.47135224757808,4.68135695782305,5.29491490865374,5.12704722179442,5.36803984934625,4.36213064696305,6.39544645865319,5.07583989531716,5.83037048767367,6.30020089277943,4.72467740204428,4.30051769414736,4.3412631335267,5.11566207256733,6.60699573419628,5.6730989273937,5.70361978091267,6.33552693079464,4.32384083307353,5.57737189103142,5.28340126023765,4.88241280086711,7.2894867433593,4.91302295986572,3.2791261996412,5.80403157021632,5.41411031055404,6.56935257990736,5.67468240288153,5.8057127235781,6.27837017871376,6.36080600595611,4.36039920597687,4.54689787174716,5.90452230516595,4.74022810123587,4.57457515359182,4.60643738026382,6.33888226728461,6.66158454386037,4.36542192192991,4.82946244580639,4.86036866686307,4.65848404198255,5.05655661693714,7.27497686429733,4.4089328338358,8.72930126979232,5.26461006179198,6.53533958641455,4.37706598515922,5.04591707462901,3.90269658837231,7.85397772032249,3.83409534218213,6.6721716666828,5.85831350619852,4.15730898611837,4.28606125513401,2.97733162463874,5.10947541612972,4.92642325121836,5.25484900129172,5.20099549063816,5.1826913687035,4.77298721719357,5.4830789963576,7.74403764991912,7.67013691129193,3.96330782986117,5.33288316933035,5.30417250701071,7.24072946907193,7.10167576114624,7.10249788269988,6.06928517405625,7.21127618970682,5.39387649412395,5.17542721759823,5.25019317310881,6.80782422848664,6.68245437258454,6.77736864942921,6.67837236680846,4.50872960284084,5.08837837179316,4.72325185127299,4.81322826686092,6.22177934696918,5.11086644660957,4.27699880118078,5.6671159524697,4.59348701510012,4.65852690096782,4.35141776352633,4.98388086597788,6.70776111307021,6.74199335913097,5.61621508776953,3.96766203877896,4.06598072132169,4.92765262940959,4.71369059971436,4.01611532607682,4.90205191868557,4.01661446825227,5.13696017964758,5.16968099240798,4.50957886722887,4.09346123278851,3.93957365286972,4.66653826176463,4.45678367849993,4.93440672657701,4.058421381146,3.16161092064758,4.52648848065814,4.49276562902786,4.02333292020897,4.87820497343678,3.92577809119811,3.97876484834205,5.04555001805098,4.40225899572532,4.48480554524245,8.8944804887853,4.15818127508851,4.28872104259816,5.14879879878624,4.50631079493823,4.40173229210904,4.02331572039487,4.05956931352472,4.08618773248567,3.77195282444083,4.74397520961079,4.60627823310145,3.85222561982418,4.7225899604872,5.86728949902254,4.61844309597494,3.23908266985457,5.08644506815459,5.04267920278409,6.74748324134301,4.8734981556225,7.22861743058803,5.33089770060967,5.32663829759713,4.37580316996173,5.11777290327619,4.46168028274881,4.48048851120354,6.76199120431096,7.15650196565693,5.73306237344176,6.69066486392819,5.97342476664019,4.45119220535019,6.54760070426989,5.4796450479549,6.31662941244676,6.77833147146092,6.28482529634751,6.30723845014453,4.91312629739388,4.66370051332247,4.0872107364381,6.7288610085133,4.04128693586952,6.25025185433972,5.84649337545145,4.03390468801897,4.98967801436682,2.93967706855497,4.93093486806791,3.93676681577589,5.59076671786419,6.50887498741079,6.89115162766416,6.48637100564816,4.40610405316683,4.42567924469518,6.44508395298583,5.32413579198995,6.34620067073354,4.29226710407811,5.68790777086417,4.48527385288817,4.70469297553709,4.46492551405562,5.0721040552607,5.54696455271683,5.43359270325409,5.73051893166712,5.23863468507016,3.89213743923398,6.16826281472879,5.84531454871583,7.34356155017373,5.20896365086407,5.13569266434442,3.27755158435017,6.80859144698304,3.83354518631655,3.98811913775663,4.56550236768727,4.50821666143881,5.91380204028055,4.56342047634283,4.90414012560023,4.04288379144896,4.12352984998296,6.63263419354802,5.14135041095172,4.80698326550756,3.29444316107672,3.28464862278941,6.32801802276655,5.96833576318361,5.29970851167081,5.80606890091621,5.73390334081172,4.49979785896925,5.36177125002817,4.71705423772354,4.83508382998318,5.48162370216547,5.80011865085044,4.75611722387427,5.87958597327294,4.36155502177353,5.31157389446795,4.47238765275713,5.04519701222376,5.27514082221936,5.62477483282544,5.94218075432442,4.44133537896662,4.49675500506508,6.1682109352124,5.31650217950059,6.42123283944626,6.39634722030436,3.31208705330909,4.80801776595942,4.88859885064884,4.95365358264253,4.61030734945991,5.36925700083525,5.07310862429633,3.99378280182883,5.38197312802115,3.3422946342416,4.87056857835176,3.29706382780524,5.82678290050138,6.64569977605792,5.71069359453533,5.12522908998178,4.9786611475241,4.47146307819737,5.34186873393073,5.3904913246757,5.52948956346302,6.19535492587122,6.56281515748746,5.31616840629074,5.69612030170661,6.23832958550648,5.84899433487241,6.42516441789096,5.65636847323688,5.57189092159473,4.37383853333026,6.38479741308436,5.34673251180361,3.39320675577187,5.02878992186393,4.98948109806007,4.76350021298862,4.75768853566441,5.27563147138096,5.30222711819607,4.82102115574574,5.96107646442945,5.12859137242665,5.22822591281784,6.7396235544698,6.17629078635745,6.34564616757902,5.83944046990322,5.85064950670053,5.75336729867276,6.12678110230125,7.09789619872016,9.74769509570893,4.21517371186432,5.35583523515982,5.99896134521726,6.82456769048982,4.54325130645505,6.21151256279165,5.85671259213631,6.23892847692394,6.31366904015971,5.41902402377584,5.78251002377645,4.10831871699393,5.93288637159336,5.3763200894594,3.84417705737238,5.07550338216307,4.02879133960925,5.08191146445022,5.71128674635458,6.15067440394581,6.13470289229413,4.24499068964716,6.22603397190355,3.86113073118641,5.72925513844625,5.35374000923533,6.33145470677476,6.15141639457655,5.59465886488426,5.55501935624596,3.91959310172956,7.5090160002767,5.90884342697241,6.08465955742279,4.60962183865384,4.66349548655051,5.23263214916504,3.41830545691265,4.36098977893222,3.39277872990628,3.43210208438774,3.93633099572385,7.41809515141921,4.62116361976659,3.97859779619602,6.41381582392392,5.90461743924537,5.92056507649426,4.04465323174538,6.48893873963035,4.56603289433368,8.35773609854694,7.5062381172145,8.68234058372903,4.24796187396172,4.99241093957069,5.91748968516818,5.35201223035715,6.28704944126269,5.29226999384004,4.45699559461978,5.46959296121035,5.0123865271935,4.94587771788588,5.04578682956641,5.14511328019748,5.38824771725515,6.0177093564706,4.94891663309608,3.85745164527237,5.79513700275633,5.39523041720913,6.50096213331349,4.69494425635801,6.14648314849177,4.94243608496414,6.00179705547161,4.31556311333221,6.30038913021534,6.29715058727527,6.14238540440448,6.52788102250223,3.92845602893036,5.41496470190063,5.35035009586615,4.57915615841944,3.88030358694572,5.15753589040116,5.31233949620777,4.01704475837353,5.23672995689239,5.27913937158559,3.92793108285788,5.70346297211976,5.34147850206247,4.8873200072453,5.74951274040679,3.75613032338285,4.05968892978918,4.69035114921777,5.80124301906679,8.2272319445713,4.80721526856421,7.10162951838105,5.79169303969942,4.9031096346021,7.11068533328963,6.4065520622482,9.29946253561067,8.19022494289216,9.92222616173087,9.40272403056994,5.97246437087932,8.13196076438255,6.49189030397994,4.1214392496664,8.70450809235802,9.77806311419232,8.67997532734288,9.96154898986068,8.14597389059437,4.80605798645365,7.12031528764541,6.90956513016864,4.64807326559829,3.87614809953091,4.54466172099463,4.8341294741678,3.80410722687568]},"columns":[{"accessor":"CLONE","name":"CLONE","type":"character"},{"accessor":"PTR.gebvs","name":"PTR.gebvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"PTR.gegvs","name":"PTR.gegvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"PPA.gebvs","name":"PPA.gebvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"PPA.gegvs","name":"PPA.gegvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"AP.gebvs","name":"AP.gebvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"AP.gegvs","name":"AP.gegvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"DMC.gebvs","name":"DMC.gebvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"DMC.gegvs","name":"DMC.gegvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"DRY.gebvs","name":"DRY.gebvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}},{"accessor":"DRY.gegvs","name":"DRY.gegvs","type":"numeric","format":{"cell":{"digits":2,"locales":"en-US"},"aggregated":{"digits":2,"locales":"en-US"}}}],"defaultPageSize":25,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"f043bddb6909cfd66679980e67ed98b6","key":"f043bddb6909cfd66679980e67ed98b6"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>write.table(PredMean, here::here(&quot;output&quot;, &quot;GenPred.csv&quot;), sep = &quot;;&quot;,
+            dec = &quot;.&quot;, quote = F)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Big Sur 11.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1-arm64/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1-arm64/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7     purrr_0.3.4    
+ [5] readr_2.0.2     tidyr_1.1.4     tibble_3.1.5    ggplot2_3.3.5  
+ [9] tidyverse_1.3.1 reactable_0.2.3 sommer_4.1.4    crayon_1.4.1   
+[13] lattice_0.20-44 MASS_7.3-54     Matrix_1.3-4    here_1.0.1     
+[17] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        lubridate_1.8.0   assertthat_0.2.1  rprojroot_2.0.2  
+ [5] digest_0.6.28     utf8_1.2.2        reactR_0.4.4      R6_2.5.1         
+ [9] cellranger_1.1.0  backports_1.2.1   reprex_2.0.1      evaluate_0.14    
+[13] httr_1.4.2        pillar_1.6.4      rlang_0.4.12      readxl_1.3.1     
+[17] rstudioapi_0.13   whisker_0.4       jquerylib_0.1.4   rmarkdown_2.11   
+[21] htmlwidgets_1.5.4 munsell_0.5.0     broom_0.7.9       compiler_4.1.1   
+[25] httpuv_1.6.3      modelr_0.1.8      xfun_0.27         pkgconfig_2.0.3  
+[29] htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0       withr_2.4.2      
+[33] tzdb_0.1.2        dbplyr_2.1.1      later_1.3.0       grid_4.1.1       
+[37] jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.1   DBI_1.1.1        
+[41] git2r_0.28.0      magrittr_2.0.1    scales_1.1.1      cli_3.0.1        
+[45] stringi_1.7.5     fs_1.5.0          promises_1.2.0.1  xml2_1.3.2       
+[49] ellipsis_0.3.2    generics_0.1.1    vctrs_0.3.8       tools_4.1.1      
+[53] glue_1.4.2        hms_1.1.1         fastmap_1.1.0     yaml_2.2.1       
+[57] colorspace_2.0-2  rvest_1.0.2       knitr_1.36        haven_2.4.3      </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
