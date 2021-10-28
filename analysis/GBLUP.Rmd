@@ -79,5 +79,71 @@ PredMean %>% reactable(defaultPageSize = 25, columns = list(
 write.table(PredMean, here::here("output", "GenPred.csv"), sep = ";",
             dec = ".", quote = F)
 
+
+## Genomic Prediction using sommer package for the harmonic mean of five agronomic traits
+library(reshape2)
+HarMean <- read.table(here::here("data", "DadosCompletos.csv"), header = T, sep = ",", dec = ".")
+HarMean %>% select(Genotipo, Trait, MHPRVG.MG) -> HarMean
+
+traits <- c("FRY", "AGY", "PLH", "DMC", "DRY")
+HarMean2 <- data.frame(CLONE = unique(HarMean$Genotipo))
+
+for(i in traits){
+  Means <- HarMean %>% filter(Trait == i)
+  Means$Trait <- NULL
+  colnames(Means) <- c("CLONE", i)
+  HarMean2 <- left_join(HarMean2, Means, by = c("CLONE"))
+}
+
+HarMean2$Add <- factor(HarMean2$CLONE, levels = row.names(A))
+HarMean2$Dom <- factor(paste(HarMean2$CLONE, "d", sep = "."), levels = row.names(D))
+  
+ModelResults<-list()
+for(i in traits){
+    require(sommer)
+# Must remove rows where there are missing values for the current trait
+HarMean3 <- HarMean2[!is.na(HarMean2[ , i]), ] %>% filter(!is.na(Add)) %>% select(Add, Dom, i)
+colnames(HarMean3)[3] <- c("trait")
+  
+fit <- mmer(fixed = trait ~ 1,
+            random = ~ vs(Add, Gu = A) + vs(Dom, Gu = D),
+            data = HarMean3, getPEV = TRUE)
+ModelResults[[i]] <- fit
+}
+
+PredHM <- data.frame(CLONE = unique(HarMean$Genotipo))
+for(i in traits){
+Res <- data.frame(CLONE = names(ModelResults[[i]]$U$`u:Add`$trait),
+                  gebvs = ModelResults[[i]]$U$`u:Add`$trait,
+                  gegvs = (ModelResults[[i]]$U$`u:Add`$trait + ModelResults[[i]]$U$`u:Dom`$trait))
+colnames(Res)[2:3] <- c(paste(i, "gebvs", sep = "."),
+                        paste(i, "gegvs", sep = "."))
+PredHM <- merge(PredHM, Res, by = "CLONE")
+}
+
+TraitsHMeans <- colMeans(HarMean2[,2:6], na.rm = T)
+
+PredHMMat <- as.matrix(PredHM[,-1])
+PredHMean <- data.frame(CLONE = PredHM$CLONE,
+                       PredHMMat + 
+                         matrix(rep(1, nrow(PredHM)),
+                                nrow = nrow(PredHM))%*%matrix(rep(TraitsHMeans,
+                                                                each = 2), ncol = 10))
+
+# Table 2. GEBVs and GEGVs plus trait Harmonic mean estimated for each clone for five agronomic traits
+PredHMean %>% reactable(defaultPageSize = 25, columns = list(
+  FRY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  FRY.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  AGY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  AGY.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PLH.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PLH.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DMC.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DMC.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DRY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DRY.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US"))))
+
+write.table(PredHMean, here::here("output", "HMPred.csv"), sep = ";",
+            dec = ".", quote = F)
 ```
 
