@@ -1,0 +1,51 @@
+---
+title: "GBLUP"
+author: "LucianoRogerio"
+date: "2021-10-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+library(here)
+library(sommer)
+
+traits<-c("PTR", "PPA", "AP", "DMC", "DRY")
+
+drgphen <- read.table(here::here("output", "DeregressBLUPsAll.CSV"), sep = ";", dec = ".")
+A <- readRDS(here::here("output", "KinshipAdd.RDS"))
+D <- readRDS(here::here("output", "KinshipDom.RDS"))
+
+drgphen2 <- drgphen[drgphen$CLONE%in%rownames(A),]
+drgphen2$Add <- factor(drgphen2$CLONE, levels = rownames(A))
+drgphen2$Dom <- factor(paste(drgphen2$CLONE, "d", sep = "."),
+                       levels = rownames(D))
+rownames(D) <- paste(rownames(D), "d", sep = ".")
+colnames(D) <- paste(colnames(D), "d", sep = ".")
+
+
+
+ModelResults<-list()
+for(i in 1:length(traits)){
+  trait <- traits[i]
+    require(sommer)
+  drgphen2<-drgphen2[!is.na(drgphen2[,i]),] # Must remove rows where there are missing values for the current trait
+
+fit <- mmer(fixed = DRY ~ 1,
+            random = ~ vs(Add, Gu=A) + vs(Dom,Gu = D),
+            weights = DRY.wt,
+            data= drgphen2,getPEV = TRUE)
+fit[["Trait"]] <- trait
+ModelResults <- fit
+}
+
+ResDRY <- data.frame(gebvs = (fit$U$`u:Add`$DRY),
+                     gegvs = (fit$U$`u:Add`$DRY + fit$U$`u:Dom`$DRY))
+write.table(ResDRY, here::here("output", "GEBVsDRY.csv"), sep = ";",
+            dec = ".", quote = F)
+
+```
+
