@@ -365,7 +365,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -374,7 +374,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -386,7 +386,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-10-28
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CassavaAdapStab/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -402,12 +402,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -474,16 +474,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtreea1f9ec5b5aaa92603ac9f8dc4f2b5d271b8d04b8targetblanka1f9ec5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/a1f9ec5b5aaa92603ac9f8dc4f2b5d271b8d04b8" target="_blank">a1f9ec5</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree1ace2970ea704c970c1a34adb731c7749dc638detargetblank1ace297a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/1ace2970ea704c970c1a34adb731c7749dc638de" target="_blank">1ace297</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtreea1f9ec5b5aaa92603ac9f8dc4f2b5d271b8d04b8targetblanka1f9ec5a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree1ace2970ea704c970c1a34adb731c7749dc638detargetblank1ace297a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/a1f9ec5b5aaa92603ac9f8dc4f2b5d271b8d04b8" target="_blank">a1f9ec5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/1ace2970ea704c970c1a34adb731c7749dc638de" target="_blank">1ace297</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -493,12 +493,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  data/DadosCompletos.csv
-
-Unstaged changes:
-    Modified:   analysis/GBLUP.Rmd
 
 </code></pre>
 <p>
@@ -539,10 +533,10 @@ Message
 <tbody>
 <tr>
 <td>
-html
+Rmd
 </td>
 <td>
-<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/be5838edd3af2739689bd4ac6e329c96eb8e293d/docs/GBLUP.html" target="_blank">be5838e</a>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/1ace2970ea704c970c1a34adb731c7749dc638de/analysis/GBLUP.Rmd" target="_blank">1ace297</a>
 </td>
 <td>
 LucianoRogerio
@@ -551,7 +545,24 @@ LucianoRogerio
 2021-10-28
 </td>
 <td>
-Build site.
+wflow_publish(files = "analysis/GBLUP.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/1ace2970ea704c970c1a34adb731c7749dc638de/docs/GBLUP.html" target="_blank">1ace297</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-10-28
+</td>
+<td>
+wflow_publish(files = "analysis/GBLUP.Rmd")
 </td>
 </tr>
 <tr>
@@ -559,7 +570,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/a1f9ec5b5aaa92603ac9f8dc4f2b5d271b8d04b8/analysis/GBLUP.Rmd" target="_blank">a1f9ec5</a>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/c3cc92df817f8c2c90ac6894ade27d070ced6f0c/analysis/GBLUP.Rmd" target="_blank">c3cc92d</a>
 </td>
 <td>
 LucianoRogerio
@@ -568,7 +579,7 @@ LucianoRogerio
 2021-10-28
 </td>
 <td>
-Genomic Prediction for five agronomic traits
+Add GBLUP for Harmonic Means
 </td>
 </tr>
 <tr>
@@ -576,7 +587,24 @@ Genomic Prediction for five agronomic traits
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/64aba2373d9651e46b097a3f7e1944b10c3b36dd/docs/GBLUP.html" target="_blank">64aba23</a>
+<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/c3cc92df817f8c2c90ac6894ade27d070ced6f0c/docs/GBLUP.html" target="_blank">c3cc92d</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-10-28
+</td>
+<td>
+Add GBLUP for Harmonic Means
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/be5838edd3af2739689bd4ac6e329c96eb8e293d/docs/GBLUP.html" target="_blank">be5838e</a>
 </td>
 <td>
 LucianoRogerio
@@ -694,49 +722,13 @@ colnames(drgphen3)[3:4] &lt;- c(&quot;trait&quot;, &quot;WT&quot;)
 fit &lt;- mmer(fixed = trait ~ 1,
             random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
             weights = WT,
-            data = drgphen3, getPEV = TRUE)
+            data = drgphen3, getPEV = TRUE, verbose = F)
 ModelResults[[i]] &lt;- fit
 }</code></pre>
 <pre><code>Note: Using an external vector in selections is ambiguous.
 ℹ Use `all_of(i)` instead of `i` to silence this message.
 ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
 This message is displayed once per session.</code></pre>
-<pre><code>iteration    LogLik     wall    cpu(sec)   restrained
-    1      -261.59   14:59:39      0           0
-    2      -230.529   14:59:40      1           0
-    3      -220.893   14:59:41      2           0
-    4      -220.588   14:59:41      2           0
-    5      -220.583   14:59:42      3           0
-    6      -220.583   14:59:42      3           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -239.168   14:59:44      1           0
-    2      -213.241   14:59:44      1           0
-    3      -204.55   14:59:45      2           0
-    4      -203.844   14:59:45      2           0
-    5      -203.835   14:59:46      3           0
-    6      -203.835   14:59:47      4           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -182.924   14:59:48      1           0
-    2      -174.806   14:59:48      1           0
-    3      -171.671   14:59:49      2           0
-    4      -171.159   14:59:50      3           0
-    5      -171.134   14:59:50      3           0
-    6      -171.133   14:59:51      4           0
-    7      -171.133   14:59:51      4           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -255.691   14:59:53      1           0
-    2      -224.549   14:59:53      1           0
-    3      -212.856   14:59:54      2           0
-    4      -211.361   14:59:54      2           0
-    5      -211.338   14:59:55      3           0
-    6      -211.337   14:59:55      3           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -258.941   14:59:57      1           0
-    2      -224.612   14:59:57      1           0
-    3      -214.435   14:59:58      2           0
-    4      -214.253   14:59:58      2           0
-    5      -214.245   14:59:59      3           0
-    6      -214.245   15:0:0      4           0</code></pre>
 <pre class="r"><code>Pred &lt;- data.frame(CLONE = unique(drgphen$CLONE))
 for(i in traits){
 Res &lt;- data.frame(CLONE = names(ModelResults[[i]]$U$`u:Add`$trait),
@@ -807,41 +799,11 @@ colnames(HarMean3)[3] &lt;- c(&quot;trait&quot;)
   
 fit &lt;- mmer(fixed = trait ~ 1,
             random = ~ vs(Add, Gu = A) + vs(Dom, Gu = D),
-            data = HarMean3, getPEV = TRUE)
+            data = HarMean3, getPEV = TRUE, verbose = F)
 ModelResults[[i]] &lt;- fit
-}</code></pre>
-<pre><code>iteration    LogLik     wall    cpu(sec)   restrained
-    1      -223.27   18:27:44      1           0
-    2      -221.195   18:27:44      1           0
-    3      -220.823   18:27:45      2           0
-    4      -220.81   18:27:45      2           0
-    5      -220.81   18:27:46      3           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -207.675   18:27:47      1           0
-    2      -202.408   18:27:48      2           0
-    3      -201.471   18:27:48      2           0
-    4      -201.422   18:27:49      3           0
-    5      -201.422   18:27:49      3           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -195.617   18:27:50      0           0
-    2      -172.076   18:27:51      1           0
-    3      -166.2   18:27:52      2           0
-    4      -165.724   18:27:52      2           0
-    5      -165.719   18:27:53      3           0
-    6      -165.718   18:27:53      3           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -164.461   18:27:54      0           0
-    2      -148.147   18:27:55      1           0
-    3      -145.16   18:27:55      1           0
-    4      -144.846   18:27:56      2           0
-    5      -144.84   18:27:57      3           0
-    6      -144.84   18:27:57      3           0
-iteration    LogLik     wall    cpu(sec)   restrained
-    1      -219.904   18:27:58      0           0
-    2      -219.192   18:27:59      1           0
-    3      -219.108   18:28:0      2           0
-    4      -219.108   18:28:0      2           0</code></pre>
-<pre class="r"><code>PredHM &lt;- data.frame(CLONE = unique(HarMean$Genotipo))
+}
+
+PredHM &lt;- data.frame(CLONE = unique(HarMean$Genotipo))
 for(i in traits){
 Res &lt;- data.frame(CLONE = names(ModelResults[[i]]$U$`u:Add`$trait),
                   gebvs = ModelResults[[i]]$U$`u:Add`$trait,
@@ -903,7 +865,7 @@ other attached packages:
  [5] purrr_0.3.4     readr_2.0.2     tidyr_1.1.4     tibble_3.1.5   
  [9] ggplot2_3.3.5   tidyverse_1.3.1 reactable_0.2.3 sommer_4.1.4   
 [13] crayon_1.4.1    lattice_0.20-44 MASS_7.3-54     Matrix_1.3-4   
-[17] here_1.0.1     
+[17] here_1.0.1      workflowr_1.6.2
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.7        lubridate_1.8.0   assertthat_0.2.1  rprojroot_2.0.2  
@@ -913,15 +875,15 @@ loaded via a namespace (and not attached):
 [17] readxl_1.3.1      rstudioapi_0.13   whisker_0.4       jquerylib_0.1.4  
 [21] rmarkdown_2.11    htmlwidgets_1.5.4 munsell_0.5.0     broom_0.7.9      
 [25] compiler_4.1.1    httpuv_1.6.3      modelr_0.1.8      xfun_0.27        
-[29] pkgconfig_2.0.3   htmltools_0.5.2   tidyselect_1.1.1  workflowr_1.6.2  
-[33] fansi_0.5.0       withr_2.4.2       tzdb_0.1.2        dbplyr_2.1.1     
-[37] later_1.3.0       grid_4.1.1        jsonlite_1.7.2    gtable_0.3.0     
-[41] lifecycle_1.0.1   DBI_1.1.1         git2r_0.28.0      magrittr_2.0.1   
-[45] scales_1.1.1      cli_3.0.1         stringi_1.7.5     fs_1.5.0         
-[49] promises_1.2.0.1  xml2_1.3.2        ellipsis_0.3.2    generics_0.1.1   
-[53] vctrs_0.3.8       tools_4.1.1       glue_1.4.2        hms_1.1.1        
-[57] fastmap_1.1.0     yaml_2.2.1        colorspace_2.0-2  rvest_1.0.2      
-[61] knitr_1.36        haven_2.4.3      </code></pre>
+[29] pkgconfig_2.0.3   htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0      
+[33] withr_2.4.2       tzdb_0.1.2        dbplyr_2.1.1      later_1.3.0      
+[37] grid_4.1.1        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.1  
+[41] DBI_1.1.1         git2r_0.28.0      magrittr_2.0.1    scales_1.1.1     
+[45] cli_3.0.1         stringi_1.7.5     fs_1.5.0          promises_1.2.0.1 
+[49] xml2_1.3.2        ellipsis_0.3.2    generics_0.1.1    vctrs_0.3.8      
+[53] tools_4.1.1       glue_1.4.2        hms_1.1.1         fastmap_1.1.0    
+[57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.2       knitr_1.36       
+[61] haven_2.4.3      </code></pre>
 </div>
 </div>
 
