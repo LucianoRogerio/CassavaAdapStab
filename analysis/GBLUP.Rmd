@@ -10,8 +10,7 @@ editor_options:
 ## Introduction
 
 ```{r}
-library(here)
-library(sommer)
+library(here); library(sommer); library(reactable); library(tidyverse)
 
 traits<-c("PTR", "PPA", "AP", "DMC", "DRY")
 
@@ -21,30 +20,62 @@ D <- readRDS(here::here("output", "KinshipDom.RDS"))
 
 drgphen2 <- drgphen[drgphen$CLONE%in%rownames(A),]
 drgphen2$Add <- factor(drgphen2$CLONE, levels = rownames(A))
-drgphen2$Dom <- factor(paste(drgphen2$CLONE, "d", sep = "."),
-                       levels = rownames(D))
+
 rownames(D) <- paste(rownames(D), "d", sep = ".")
 colnames(D) <- paste(colnames(D), "d", sep = ".")
 
+drgphen2$Dom <- factor(paste(drgphen2$CLONE, "d", sep = "."),
+                       levels = rownames(D))
 
-
+## Genomic Prediction using sommer package for the five agronomic traits
 ModelResults<-list()
-for(i in 1:length(traits)){
-  trait <- traits[i]
+for(i in traits){
     require(sommer)
-  drgphen2<-drgphen2[!is.na(drgphen2[,i]),] # Must remove rows where there are missing values for the current trait
-
-fit <- mmer(fixed = DRY ~ 1,
-            random = ~ vs(Add, Gu=A) + vs(Dom,Gu = D),
-            weights = DRY.wt,
-            data= drgphen2,getPEV = TRUE)
-fit[["Trait"]] <- trait
-ModelResults <- fit
+# Must remove rows where there are missing values for the current trait
+drgphen3 <- drgphen2[!is.na(drgphen2[ , i]), ] %>% select(Add, Dom, i, paste(i, "wt", sep = "."))
+colnames(drgphen3)[3:4] <- c("trait", "WT")
+  
+fit <- mmer(fixed = trait ~ 1,
+            random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
+            weights = WT,
+            data = drgphen3, getPEV = TRUE)
+ModelResults[[i]] <- fit
 }
 
-ResDRY <- data.frame(gebvs = (fit$U$`u:Add`$DRY),
-                     gegvs = (fit$U$`u:Add`$DRY + fit$U$`u:Dom`$DRY))
-write.table(ResDRY, here::here("output", "GEBVsDRY.csv"), sep = ";",
+Pred <- data.frame(CLONE = unique(drgphen$CLONE))
+for(i in traits){
+Res <- data.frame(CLONE = names(ModelResults[[i]]$U$`u:Add`$trait),
+                  gebvs = ModelResults[[i]]$U$`u:Add`$trait,
+                  gegvs = (ModelResults[[i]]$U$`u:Add`$trait + ModelResults[[i]]$U$`u:Dom`$trait))
+colnames(Res)[2:3] <- c(paste(i, "gebvs", sep = "."),
+                        paste(i, "gegvs", sep = "."))
+Pred <- merge(Pred, Res, by = "CLONE")
+}
+
+phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ";", dec = ".")
+
+TraitsMeans <- colMeans(phen[,8:12], na.rm = T)
+
+PredMat <- as.matrix(Pred[,-1])
+PredMean <- data.frame(CLONE = Pred$CLONE,
+                       PredMat + 
+                         matrix(rep(1, nrow(Pred)),
+                                nrow = nrow(Pred))%*%matrix(rep(TraitsMeans,
+                                                                each = 2), ncol = 10))
+# Table 1. GEBVs and GEGVs plus trait mean estimated for each clone for five agronomic traits
+PredMean %>% reactable(defaultPageSize = 25, columns = list(
+  PTR.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PTR.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PPA.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PPA.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  AP.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  AP.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DMC.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DMC.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DRY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  DRY.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US"))))
+
+write.table(PredMean, here::here("output", "GenPred.csv"), sep = ";",
             dec = ".", quote = F)
 
 ```
