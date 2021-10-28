@@ -39,7 +39,7 @@ colnames(drgphen3)[3:4] <- c("trait", "WT")
 fit <- mmer(fixed = trait ~ 1,
             random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
             weights = WT,
-            data = drgphen3, getPEV = TRUE)
+            data = drgphen3, getPEV = TRUE, verbose = F)
 ModelResults[[i]] <- fit
 }
 
@@ -107,7 +107,7 @@ colnames(HarMean3)[3] <- c("trait")
   
 fit <- mmer(fixed = trait ~ 1,
             random = ~ vs(Add, Gu = A) + vs(Dom, Gu = D),
-            data = HarMean3, getPEV = TRUE)
+            data = HarMean3, getPEV = TRUE, verbose = F)
 ModelResults[[i]] <- fit
 }
 
