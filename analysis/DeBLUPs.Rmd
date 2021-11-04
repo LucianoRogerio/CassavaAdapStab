@@ -18,10 +18,10 @@ library(here)
 
 source(here::here("code", "deregress.R"))
 
-phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ";", dec = ".")
+phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ",", dec = ".")
 
 # Trait list (this be frequently useful to iterate an analysis over many traits)
-traits<-c("PTR", "PPA", "AP", "DMC", "DRY")
+traits <- c("FRY", "AGY", "PLH", "DMC", "DRY")
 
 ##########
 # Create design variables that explicitly nest factors

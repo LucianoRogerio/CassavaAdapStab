@@ -13,7 +13,7 @@ editor_options:
 suppressMessages(library(here)); suppressMessages(library(sommer))
 suppressMessages(library(reactable)); suppressMessages(library(tidyverse))
 
-traits<-c("PTR", "PPA", "AP", "DMC", "DRY")
+traits <- c("FRY", "AGY", "PLH", "DMC", "DRY")
 
 drgphen <- read.table(here::here("output", "DeregressBLUPsAll.CSV"), sep = ";", dec = ".")
 A <- readRDS(here::here("output", "KinshipAdd.RDS"))
@@ -33,8 +33,8 @@ ModelResults<-list()
 for(i in traits){
     require(sommer)
 # Must remove rows where there are missing values for the current trait
-drgphen3 <- drgphen2[!is.na(drgphen2[ , i]), ] %>% select(Add, Dom, i, paste(i, "wt", sep = "."))
-colnames(drgphen3)[3:4] <- c("trait", "WT")
+drgphen3 <- drgphen2[!is.na(drgphen2[ , i]), ] %>% select(Add, Dom, i, paste(i, "egv", sep = "."), paste(i, "wt", sep = "."))
+colnames(drgphen3)[3:5] <- c("trait", "blup", "WT")
   
 fit <- mmer(fixed = trait ~ 1,
             random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
@@ -53,7 +53,7 @@ colnames(Res)[2:3] <- c(paste(i, "gebvs", sep = "."),
 Pred <- merge(Pred, Res, by = "CLONE")
 }
 
-phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ";", dec = ".")
+phen<-read.table(here::here("data", "Dados_Finais_2020_15_locais.csv"), head=T, sep = ",", dec = ".")
 
 TraitsMeans <- colMeans(phen[,8:12], na.rm = T)
 
@@ -65,12 +65,12 @@ PredMean <- data.frame(CLONE = Pred$CLONE,
                                                                 each = 2), ncol = 10))
 # Table 1. GEBVs and GEGVs plus trait mean estimated for each clone for five agronomic traits
 PredMean %>% reactable(defaultPageSize = 25, columns = list(
-  PTR.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
-  PTR.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
-  PPA.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
-  PPA.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
-  AP.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
-  AP.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  FRY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  FRY.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  AGY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  AGY.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PLH.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
+  PLH.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
   DMC.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
   DMC.gegvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
   DRY.gebvs = colDef(format = colFormat(digits = 2, locales = "en-US")),
@@ -147,3 +147,161 @@ write.table(PredHMean, here::here("output", "HMPred.csv"), sep = ";",
             dec = ".", quote = F)
 ```
 
+
+## Cross Validation for Cassava agronomic Traits
+
+```{r, eval=FALSE}
+
+suppressMessages(library(here)); suppressMessages(library(sommer))
+suppressMessages(library(reactable)); suppressMessages(library(tidyverse))
+
+traits <- c("FRY", "AGY", "PLH", "DMC", "DRY")
+
+drgphen <- read.table(here::here("output", "DeregressBLUPsAll.CSV"), sep = ";", dec = ".")
+
+A <- readRDS(here::here("output", "KinshipAdd.RDS"))
+D <- readRDS(here::here("output", "KinshipDom.RDS"))
+
+drgphen2 <- drgphen[drgphen$CLONE%in%rownames(A),]
+drgphen2$Add <- factor(drgphen2$CLONE, levels = rownames(A))
+
+rownames(D) <- paste(rownames(D), "d", sep = ".")
+colnames(D) <- paste(colnames(D), "d", sep = ".")
+
+drgphen2$Dom <- factor(paste(drgphen2$CLONE, "d", sep = "."),
+                       levels = rownames(D))
+nRep <- 25
+nFold <- 5
+
+## Genomic Prediction using sommer package for the five agronomic traits
+CVResT <- NULL
+set.seed(1)
+for(i in traits){
+    require(sommer)
+# Must remove rows where there are missing values for the current trait
+drgphen3 <- drgphen2[!is.na(drgphen2[ , i]), ] %>% select(Add, Dom, i, paste(i, "egv", sep = "."), paste(i, "wt", sep = "."))
+colnames(drgphen3)[3:5] <- c("trait", "blup", "WT")
+
+for(rep in 1:nRep){
+
+drgphen3$Folds <- sample(rep(1:nFold, ceiling(nrow(drgphen3)/nFold)))[1:nrow(drgphen3)]
+
+for(fold in 1:nFold){
+drgphen4 <- drgphen3
+drgphen4[drgphen4$Folds==fold, "trait"] <- NA
+drgphen4[drgphen4$Folds==fold, "WT"] <- NA
+GenPred <- data.frame(CLONE = as.character(drgphen4$Add[is.na(drgphen4$trait)]),
+                      BLUPS = drgphen3$blup[is.na(drgphen4$trait)])
+
+
+fit <- mmer(fixed = trait ~ 1,
+            random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
+            weights = WT,
+            data = drgphen3, getPEV = TRUE, verbose = F)
+
+Res <- data.frame(CLONE = names(fit$U$`u:Add`$trait),
+                  gebvs = fit$U$`u:Add`$trait,
+                  gegvs = (fit$U$`u:Add`$trait + fit$U$`u:Dom`$trait)) %>%
+  filter(CLONE%in%GenPred$CLONE)
+
+Acc <- Res %>% left_join(GenPred, by = "CLONE") %>% select(-CLONE) %>% cor() %>%
+  as.data.frame()
+
+CVRes <- data.frame(Trait = i,
+                    Rep = rep,
+                    Fold = fold,
+                    Acc[3,1:2], row.names = NULL)
+CVResT <- rbind(CVResT, CVRes)
+}
+}
+}
+
+CVResT$Trait <- factor(CVResT$Trait, levels = c("AGY", "FRY", "DRY", "DMC", "PLH"))
+CVResT %>% melt(id.vars = c("Trait", "Rep", "Fold"),
+                value.name = "Acc", 
+                variable.name = "Pred") %>%
+  ggplot(aes(x = Trait, y = Acc, fill = Pred)) + geom_boxplot() + ylim(0,1) +
+  theme_classic()
+```
+
+## Cross Validation for Harmonic Mean of Cassava agronomic Traits
+
+```{r, eval=FALSE}
+
+A <- readRDS(here::here("output", "KinshipAdd.RDS"))
+D <- readRDS(here::here("output", "KinshipDom.RDS"))
+
+library(reshape2)
+HarMean <- read.table(here::here("data", "DadosCompletos.csv"), header = T, sep = ",", dec = ".")
+HarMean %>% select(Genotipo, Trait, MHPRVG.MG) -> HarMean
+
+traits <- c("FRY", "AGY", "PLH", "DMC", "DRY")
+HarMean2 <- data.frame(CLONE = unique(HarMean$Genotipo))
+
+for(i in traits){
+  Means <- HarMean %>% filter(Trait == i)
+  Means$Trait <- NULL
+  colnames(Means) <- c("CLONE", i)
+  HarMean2 <- left_join(HarMean2, Means, by = c("CLONE"))
+}
+
+HarMean2$Add <- factor(HarMean2$CLONE, levels = row.names(A))
+
+rownames(D) <- paste(rownames(D), "d", sep = ".")
+colnames(D) <- paste(colnames(D), "d", sep = ".")
+
+HarMean2$Dom <- factor(paste(HarMean2$CLONE, "d", sep = "."), levels = row.names(D))
+
+nRep <- 25
+nFold <- 5
+
+## Genomic Prediction using sommer package for the five agronomic traits
+CVResT <- NULL
+set.seed(1)
+for(i in traits){
+    require(sommer)
+# Must remove rows where there are missing values for the current trait
+HarMean3 <- HarMean2[!is.na(HarMean2[ , i]), ] %>% filter(!is.na(Add)) %>% select(Add, Dom, i)
+colnames(HarMean3)[3] <- c("trait")
+
+
+for(rep in 1:nRep){
+
+HarMean3$Folds <- sample(rep(1:nFold, ceiling(nrow(HarMean3)/nFold)))[1:nrow(HarMean3)]
+
+for(fold in 1:nFold){
+HarMean4 <- HarMean3
+HarMean4[HarMean4$Folds==fold, "trait"] <- NA
+HarMean4[HarMean4$Folds==fold, "WT"] <- NA
+GenPred <- data.frame(CLONE = as.character(HarMean4$Add[is.na(HarMean4$trait)]),
+                      HARMEAN = HarMean3$trait[is.na(HarMean4$trait)])
+
+
+fit <- mmer(fixed = trait ~ 1,
+            random = ~ vs(Add, Gu = A) + vs(Dom,Gu = D),
+            data = HarMean3, getPEV = TRUE, verbose = F)
+
+Res <- data.frame(CLONE = names(fit$U$`u:Add`$trait),
+                  gebvs = fit$U$`u:Add`$trait,
+                  gegvs = (fit$U$`u:Add`$trait + fit$U$`u:Dom`$trait)) %>%
+  filter(CLONE%in%GenPred$CLONE)
+
+Acc <- Res %>% left_join(GenPred, by = "CLONE") %>% select(-CLONE) %>% cor() %>%
+  as.data.frame()
+
+CVRes <- data.frame(Trait = i,
+                    Rep = rep,
+                    Fold = fold,
+                    Acc[3,1:2], row.names = NULL)
+CVResT <- rbind(CVResT, CVRes)
+}
+}
+}
+
+CVResT$Trait <- factor(CVResT$Trait, levels = c("AGY", "FRY", "DRY", "DMC", "PLH"))
+CVResT %>% melt(id.vars = c("Trait", "Rep", "Fold"),
+                value.name = "Acc", 
+                variable.name = "Pred") %>%
+  ggplot(aes(x = Trait, y = Acc, fill = Pred)) + geom_boxplot() + ylim(0,1) +
+  theme_classic()
+```
