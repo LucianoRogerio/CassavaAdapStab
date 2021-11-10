@@ -383,7 +383,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-11-04
+<strong>Last updated:</strong> 2021-11-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -474,16 +474,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtreefedc0003408285c8337ef7b08dd5a9b3ce342081targetblankfedc000a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/fedc0003408285c8337ef7b08dd5a9b3ce342081" target="_blank">fedc000</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree8699586e0116a9960c1782fe3187ccf6471fd89atargetblank8699586a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/8699586e0116a9960c1782fe3187ccf6471fd89a" target="_blank">8699586</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtreefedc0003408285c8337ef7b08dd5a9b3ce342081targetblankfedc000a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree8699586e0116a9960c1782fe3187ccf6471fd89atargetblank8699586a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/fedc0003408285c8337ef7b08dd5a9b3ce342081" target="_blank">fedc000</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/8699586e0116a9960c1782fe3187ccf6471fd89a" target="_blank">8699586</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,11 +496,7 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Unstaged changes:
-    Modified:   analysis/DeBLUPs.Rmd
     Modified:   analysis/GBLUP.Rmd
-    Modified:   data/Dados_Finais_2020_15_locais.csv
-    Modified:   output/DeregressBLUPsAll.CSV
-    Modified:   output/GenPred.csv
 
 </code></pre>
 <p>
@@ -539,6 +535,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/8699586e0116a9960c1782fe3187ccf6471fd89a/analysis/GBLUP.Rmd" target="_blank">8699586</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-11-04
+</td>
+<td>
+Add Cross-validation for Agronomic Traits and Harmonic Means
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/8699586e0116a9960c1782fe3187ccf6471fd89a/docs/GBLUP.html" target="_blank">8699586</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-11-04
+</td>
+<td>
+Add Cross-validation for Agronomic Traits and Harmonic Means
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -819,7 +849,8 @@ ModelResults&lt;-list()
 for(i in traits){
     require(sommer)
 # Must remove rows where there are missing values for the current trait
-HarMean3 &lt;- HarMean2[!is.na(HarMean2[ , i]), ] %&gt;% filter(!is.na(Add)) %&gt;% select(Add, Dom, i)
+HarMean3 &lt;- HarMean2[!is.na(HarMean2[ , i]), ] %&gt;% filter(!is.na(Add)) %&gt;%
+  dplyr::select(Add, Dom, i)
 colnames(HarMean3)[3] &lt;- c(&quot;trait&quot;)
   
 fit &lt;- mmer(fixed = trait ~ 1,
@@ -942,7 +973,7 @@ CVResT %&gt;% melt(id.vars = c(&quot;Trait&quot;, &quot;Rep&quot;, &quot;Fold&qu
 <pre class="r"><code>A &lt;- readRDS(here::here(&quot;output&quot;, &quot;KinshipAdd.RDS&quot;))
 D &lt;- readRDS(here::here(&quot;output&quot;, &quot;KinshipDom.RDS&quot;))
 
-library(reshape2)
+library(reshape2); library(tidyverse)
 HarMean &lt;- read.table(here::here(&quot;data&quot;, &quot;DadosCompletos.csv&quot;), header = T, sep = &quot;,&quot;, dec = &quot;.&quot;)
 HarMean %&gt;% select(Genotipo, Trait, MHPRVG.MG) -&gt; HarMean
 
@@ -1039,27 +1070,27 @@ attached base packages:
 
 other attached packages:
  [1] reshape2_1.4.4  forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7    
- [5] purrr_0.3.4     readr_2.0.2     tidyr_1.1.4     tibble_3.1.5   
+ [5] purrr_0.3.4     readr_2.0.2     tidyr_1.1.4     tibble_3.1.6   
  [9] ggplot2_3.3.5   tidyverse_1.3.1 reactable_0.2.3 sommer_4.1.4   
-[13] crayon_1.4.2    lattice_0.20-44 MASS_7.3-54     Matrix_1.3-4   
+[13] crayon_1.4.2    lattice_0.20-45 MASS_7.3-54     Matrix_1.3-4   
 [17] here_1.0.1     
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.7        lubridate_1.8.0   assertthat_0.2.1  rprojroot_2.0.2  
  [5] digest_0.6.28     utf8_1.2.2        plyr_1.8.6        reactR_0.4.4     
- [9] cellranger_1.1.0  R6_2.5.1          backports_1.2.1   reprex_2.0.1     
+ [9] cellranger_1.1.0  R6_2.5.1          backports_1.3.0   reprex_2.0.1     
 [13] evaluate_0.14     httr_1.4.2        pillar_1.6.4      rlang_0.4.12     
 [17] readxl_1.3.1      rstudioapi_0.13   whisker_0.4       jquerylib_0.1.4  
-[21] rmarkdown_2.11    htmlwidgets_1.5.4 munsell_0.5.0     broom_0.7.9      
-[25] compiler_4.1.1    httpuv_1.6.3      modelr_0.1.8      xfun_0.27        
+[21] rmarkdown_2.11    htmlwidgets_1.5.4 munsell_0.5.0     broom_0.7.10     
+[25] compiler_4.1.1    httpuv_1.6.3      modelr_0.1.8      xfun_0.28        
 [29] pkgconfig_2.0.3   htmltools_0.5.2   tidyselect_1.1.1  workflowr_1.6.2  
-[33] fansi_0.5.0       withr_2.4.2       tzdb_0.1.2        dbplyr_2.1.1     
+[33] fansi_0.5.0       withr_2.4.2       tzdb_0.2.0        dbplyr_2.1.1     
 [37] later_1.3.0       grid_4.1.1        jsonlite_1.7.2    gtable_0.3.0     
 [41] lifecycle_1.0.1   DBI_1.1.1         git2r_0.28.0      magrittr_2.0.1   
 [45] scales_1.1.1      cli_3.1.0         stringi_1.7.5     fs_1.5.0         
 [49] promises_1.2.0.1  xml2_1.3.2        bslib_0.3.1       ellipsis_0.3.2   
-[53] generics_0.1.1    vctrs_0.3.8       tools_4.1.1       glue_1.4.2       
-[57] crosstalk_1.1.1   hms_1.1.1         fastmap_1.1.0     yaml_2.2.1       
+[53] generics_0.1.1    vctrs_0.3.8       tools_4.1.1       glue_1.5.0       
+[57] crosstalk_1.2.0   hms_1.1.1         fastmap_1.1.0     yaml_2.2.1       
 [61] colorspace_2.0-2  rvest_1.0.2       knitr_1.36        haven_2.4.3      
 [65] sass_0.4.0       </code></pre>
 </div>

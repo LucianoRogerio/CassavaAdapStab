@@ -102,7 +102,8 @@ ModelResults<-list()
 for(i in traits){
     require(sommer)
 # Must remove rows where there are missing values for the current trait
-HarMean3 <- HarMean2[!is.na(HarMean2[ , i]), ] %>% filter(!is.na(Add)) %>% select(Add, Dom, i)
+HarMean3 <- HarMean2[!is.na(HarMean2[ , i]), ] %>% filter(!is.na(Add)) %>%
+  dplyr::select(Add, Dom, i)
 colnames(HarMean3)[3] <- c("trait")
   
 fit <- mmer(fixed = trait ~ 1,
@@ -231,7 +232,7 @@ CVResT %>% melt(id.vars = c("Trait", "Rep", "Fold"),
 A <- readRDS(here::here("output", "KinshipAdd.RDS"))
 D <- readRDS(here::here("output", "KinshipDom.RDS"))
 
-library(reshape2)
+library(reshape2); library(tidyverse)
 HarMean <- read.table(here::here("data", "DadosCompletos.csv"), header = T, sep = ",", dec = ".")
 HarMean %>% select(Genotipo, Trait, MHPRVG.MG) -> HarMean
 
