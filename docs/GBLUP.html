@@ -474,16 +474,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree8699586e0116a9960c1782fe3187ccf6471fd89atargetblank8699586a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/8699586e0116a9960c1782fe3187ccf6471fd89a" target="_blank">8699586</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree4435c29e09d25df0a2b1e69dccb3f529ff21f36ctargetblank4435c29a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/4435c29e09d25df0a2b1e69dccb3f529ff21f36c" target="_blank">4435c29</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree8699586e0116a9960c1782fe3187ccf6471fd89atargetblank8699586a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomLucianoRogerioCassavaAdapStabtree4435c29e09d25df0a2b1e69dccb3f529ff21f36ctargetblank4435c29a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/8699586e0116a9960c1782fe3187ccf6471fd89a" target="_blank">8699586</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/LucianoRogerio/CassavaAdapStab/tree/4435c29e09d25df0a2b1e69dccb3f529ff21f36c" target="_blank">4435c29</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -535,6 +535,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/LucianoRogerio/CassavaAdapStab/blob/4435c29e09d25df0a2b1e69dccb3f529ff21f36c/analysis/GBLUP.Rmd" target="_blank">4435c29</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-11-10
+</td>
+<td>
+Added more specific package environment for the select function
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/LucianoRogerio/CassavaAdapStab/4435c29e09d25df0a2b1e69dccb3f529ff21f36c/docs/GBLUP.html" target="_blank">4435c29</a>
+</td>
+<td>
+LucianoRogerio
+</td>
+<td>
+2021-11-10
+</td>
+<td>
+Added more specific package environment for the select function
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -832,6 +866,9 @@ Attaching package: &#39;reshape2&#39;</code></pre>
 <pre class="r"><code>HarMean &lt;- read.table(here::here(&quot;data&quot;, &quot;DadosCompletos.csv&quot;), header = T, sep = &quot;,&quot;, dec = &quot;.&quot;)
 HarMean %&gt;% select(Genotipo, Trait, MHPRVG.MG) -&gt; HarMean
 
+A &lt;- readRDS(here::here(&quot;output&quot;, &quot;KinshipAdd.RDS&quot;))
+D &lt;- readRDS(here::here(&quot;output&quot;, &quot;KinshipDom.RDS&quot;))
+
 traits &lt;- c(&quot;FRY&quot;, &quot;AGY&quot;, &quot;PLH&quot;, &quot;DMC&quot;, &quot;DRY&quot;)
 HarMean2 &lt;- data.frame(CLONE = unique(HarMean$Genotipo))
 
@@ -843,6 +880,10 @@ for(i in traits){
 }
 
 HarMean2$Add &lt;- factor(HarMean2$CLONE, levels = row.names(A))
+
+rownames(D) &lt;- paste(rownames(D), &quot;d&quot;, sep = &quot;.&quot;)
+colnames(D) &lt;- paste(colnames(D), &quot;d&quot;, sep = &quot;.&quot;)
+
 HarMean2$Dom &lt;- factor(paste(HarMean2$CLONE, &quot;d&quot;, sep = &quot;.&quot;), levels = row.names(D))
   
 ModelResults&lt;-list()

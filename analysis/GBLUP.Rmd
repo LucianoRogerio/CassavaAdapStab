@@ -85,6 +85,9 @@ library(reshape2)
 HarMean <- read.table(here::here("data", "DadosCompletos.csv"), header = T, sep = ",", dec = ".")
 HarMean %>% select(Genotipo, Trait, MHPRVG.MG) -> HarMean
 
+A <- readRDS(here::here("output", "KinshipAdd.RDS"))
+D <- readRDS(here::here("output", "KinshipDom.RDS"))
+
 traits <- c("FRY", "AGY", "PLH", "DMC", "DRY")
 HarMean2 <- data.frame(CLONE = unique(HarMean$Genotipo))
 
@@ -96,6 +99,10 @@ for(i in traits){
 }
 
 HarMean2$Add <- factor(HarMean2$CLONE, levels = row.names(A))
+
+rownames(D) <- paste(rownames(D), "d", sep = ".")
+colnames(D) <- paste(colnames(D), "d", sep = ".")
+
 HarMean2$Dom <- factor(paste(HarMean2$CLONE, "d", sep = "."), levels = row.names(D))
   
 ModelResults<-list()
